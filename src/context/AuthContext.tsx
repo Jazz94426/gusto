@@ -9,8 +9,7 @@ import {
 } from "react";
 import {
   onAuthStateChanged,
-  signInWithRedirect,
-  getRedirectResult,
+  signInWithPopup,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut as firebaseSignOut,
@@ -59,21 +58,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Handle redirect result for mobile devices
-    getRedirectResult(auth)
-      .then(async (result) => {
-        if (result?.user) {
-          try {
-            await ensureUserDocument(result.user);
-          } catch (e) {
-            console.error("Failed to ensure user document after redirect:", e);
-          }
-        }
-      })
-      .catch((error) => {
-        console.error("Redirect auth error:", error);
-      });
-
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       setUser(firebaseUser);
       if (firebaseUser) {
@@ -90,7 +74,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signInWithGoogle = async () => {
-    await signInWithRedirect(auth, googleProvider);
+    const result = await signInWithPopup(auth, googleProvider);
+    await ensureUserDocument(result.user);
   };
 
   const signInWithEmail = async (email: string, password: string) => {

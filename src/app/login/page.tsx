@@ -55,10 +55,10 @@ export default function LoginPage() {
     setIsGoogleLoading(true);
     try {
       await signInWithGoogle();
-      // Note: we don't push to /discover here because signInWithGoogle now uses redirect.
-      // The useEffect above will handle the redirect when the user state updates.
+      router.push("/discover");
     } catch (err: any) {
       setError(err.message || t("common.error"));
+    } finally {
       setIsGoogleLoading(false);
     }
   };
