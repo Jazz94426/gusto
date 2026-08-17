@@ -183,8 +183,8 @@ service cloud.firestore {
                data.visibility in ['public', 'private'] &&
                data.status in ['draft', 'validated'] &&
                data.sourceType in ['manual', 'url', 'image'] &&
-               (!('description' in data) || (data.description is string && data.description.size() <= 1000)) &&
-               (!('coverImageURL' in data) || (data.coverImageURL is string && data.coverImageURL.size() <= 1048576)) &&
+               (!('description' in data) || (data.description is string && data.description.size() <= 2000)) &&
+               (!('coverImageURL' in data) || (data.coverImageURL is string && data.coverImageURL.size() <= 3145728)) &&
                (!('tags' in data) || (data.tags is list && data.tags.size() <= 20)) &&
                (!('sourceURL' in data) || (data.sourceURL is string && data.sourceURL.size() <= 1000)) &&
                (!('utensils' in data) || (data.utensils is list && data.utensils.size() <= 50)) &&
@@ -192,10 +192,9 @@ service cloud.firestore {
       }
 
       // Public validated recipes are readable by all authenticated users
-      // Private or draft recipes are only readable by the owner
-      allow read: if isAuthenticated() &&
-                     (resource.data.ownerId == request.auth.uid ||
-                      (resource.data.visibility == 'public' && resource.data.status == 'validated'));
+      // Public recipes are readable by anyone. Private/draft recipes are only readable by the owner.
+      allow read: if (resource.data.visibility == 'public' && resource.data.status == 'validated') ||
+                     (isAuthenticated() && resource.data.ownerId == request.auth.uid);
 
       // Only authenticated users can create recipes they own
       allow create: if isAuthenticated() &&

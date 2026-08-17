@@ -225,7 +225,7 @@ export function ImageMaskingTool({ onSuccess }: ImageMaskingToolProps) {
       }
       
       const extractedData = await extractRecipeFromImages(base64Images);
-      onSuccess({...extractedData, sourceType: "scan"});
+      onSuccess({...extractedData, sourceType: "image"});
       
     } catch (err) {
       console.error(err);

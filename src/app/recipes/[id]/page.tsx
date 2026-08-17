@@ -8,7 +8,8 @@ import { useAuth } from '@/context/AuthContext';
 import { useTranslation } from '@/hooks/useTranslation';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
-import { Share2, Printer, ShoppingCart, Star, Flame, ArrowLeft } from 'lucide-react';
+import { Heart, Share2, Clock, Users, ArrowLeft, MoreVertical, Edit2, Trash2, Printer, CheckCircle, Utensils, Flame, User, MessageSquare, ShoppingCart, Star } from 'lucide-react';
+import { estimateMacros } from '@/lib/macroEstimator';
 import { useRouter } from 'next/navigation';
 import { PREDEFINED_UTENSILS } from '@/constants/utensils';
 
@@ -246,20 +247,12 @@ export default function RecipeDetailPage({ params }: { params: Promise<{ id: str
   const isPublic = displayRecipe.visibility === 'public';
 
   const hashString = displayRecipe.title + (displayRecipe.ingredients?.map(i => `${i.name}${i.quantity}`).join('') || '');
-  const hash = hashString.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-  
-  const baseCals = 300 + (hash % 400);
-  const baseProtein = 10 + (hash % 40);
-  const baseCarbs = 20 + ((hash * 2) % 60);
-  const baseFat = 10 + ((hash * 3) % 30);
 
-  const ratio = currentServings / Math.max(1, displayRecipe.servings || 1);
-  const estimatedMacros = {
-    cals: Math.round(baseCals * ratio),
-    protein: Math.round(baseProtein * ratio),
-    carbs: Math.round(baseCarbs * ratio),
-    fat: Math.round(baseFat * ratio),
-  };
+  const estimatedMacros = estimateMacros(
+    displayRecipe.ingredients || [], 
+    displayRecipe.servings || 1, 
+    hashString
+  );
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 pb-24 print:py-0 print:pb-0">
@@ -411,7 +404,7 @@ export default function RecipeDetailPage({ params }: { params: Promise<{ id: str
           <div className="mt-16 pt-8 border-t border-stone-light/30 print:break-inside-avoid">
             <h3 className="text-2xl font-heading text-charcoal font-black mb-6 flex items-center gap-3">
               {t('recipe.nutrition_values')} 
-              <span className="text-stone font-sans font-normal tracking-normal text-sm normal-case">({t('recipe.total_estimation')})</span>
+              <span className="text-stone font-sans font-normal tracking-normal text-sm normal-case">({t('recipe.per_serving_estimation') || 'estimation par portion'})</span>
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               <div className="bg-white rounded-2xl p-5 flex flex-col items-center justify-center text-center shadow-sm border border-stone-light/40">

@@ -108,7 +108,12 @@ export default function RecipesPage() {
   };
 
   const filteredRecipes = recipes.filter(recipe => {
-    if (searchQuery && !recipe.title.toLowerCase().includes(searchQuery.toLowerCase())) return false;
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      const matchesTitle = recipe.title.toLowerCase().includes(q);
+      const matchesTags = recipe.tags?.some(tag => tag.toLowerCase().includes(q));
+      if (!matchesTitle && !matchesTags) return false;
+    }
     if (difficultyFilter !== 'all' && recipe.difficulty !== difficultyFilter) return false;
     if (visibilityFilter !== 'all' && recipe.visibility !== visibilityFilter) return false;
     
@@ -289,8 +294,10 @@ export default function RecipesPage() {
         </div>
 
         {filteredRecipes.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-[32px] border border-stone-light/30 shadow-sm">
-            <div className="text-5xl mb-4">🍽️</div>
+          <div className="text-center py-20 bg-white rounded-[32px] border border-stone-light/30 shadow-sm flex flex-col items-center">
+            <div className="mb-4 bg-terracotta/10 p-4 rounded-full">
+              <Utensils className="w-12 h-12 text-terracotta" />
+            </div>
             <h3 className="text-xl font-medium text-charcoal mb-2">{t("empty_states.no_recipes")}</h3>
             <p className="text-brown">Essayez de modifier vos filtres ou créez une nouvelle recette.</p>
           </div>

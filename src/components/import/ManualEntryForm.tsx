@@ -17,9 +17,15 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { PREDEFINED_UTENSILS } from "@/constants/utensils";
-import { Check } from "lucide-react";
+import { Check, X as XIcon } from "lucide-react";
 import { ImageCropperModal } from "@/components/ui/ImageCropperModal";
 import { Recipe, Ingredient, Instruction } from "@/types";
+
+const PREDEFINED_TAGS = [
+  "Petit-déjeuner", "Déjeuner", "Dîner", "Goûter", "Dessert", 
+  "Asiatique", "Européen", "Végétarien", "Vegan", "Rapide", "Healthy",
+  "Sans gluten", "Épicé", "Salade", "Boisson"
+];
 
 export interface ManualEntryFormProps {
   initialData?: Partial<Recipe>;
@@ -544,7 +550,7 @@ export function ManualEntryForm({
                       onClick={() => handleRemoveInstruction(idx)}
                       className="text-red-500"
                     >
-                      X
+                      <XIcon className="w-5 h-5" />
                     </Button>
                   </div>
                   </div>
@@ -630,7 +636,7 @@ export function ManualEntryForm({
                     />
                     <Select
                       className="w-24"
-                      value={ing.unit}
+                      value={ing.unit || ""}
                       onChange={(e) =>
                         handleUpdateIngredient(idx, "unit", e.target.value)
                       }
@@ -651,7 +657,7 @@ export function ManualEntryForm({
                       onClick={() => handleRemoveIngredient(idx)}
                       className="text-red-500 px-2"
                     >
-                      X
+                      <XIcon className="w-5 h-5" />
                     </Button>
                   </div>
                   <Input
@@ -709,6 +715,27 @@ export function ManualEntryForm({
                   </button>
                 </span>
               ))}
+            </div>
+            
+            {/* Predefined tag suggestions */}
+            <div className="mt-4">
+              <label className="block text-xs font-medium text-stone mb-2">
+                Suggestions :
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {PREDEFINED_TAGS.filter(tag => !tags.includes(tag)).map((tag) => (
+                  <button
+                    key={tag}
+                    type="button"
+                    onClick={() => {
+                      if (!tags.includes(tag)) setTags([...tags, tag]);
+                    }}
+                    className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-stone-light/10 text-stone hover:bg-terracotta/10 hover:text-terracotta transition-colors border border-transparent hover:border-terracotta/30"
+                  >
+                    + {tag}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 

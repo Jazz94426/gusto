@@ -118,8 +118,11 @@ export default function DiscoverPage() {
 
   const filteredRecipes = recipes.filter(recipe => {
     // Basic local text search
-    if (searchQuery && !recipe.title.toLowerCase().includes(searchQuery.toLowerCase())) {
-      return false;
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      const matchesTitle = recipe.title.toLowerCase().includes(q);
+      const matchesTags = recipe.tags?.some(tag => tag.toLowerCase().includes(q));
+      if (!matchesTitle && !matchesTags) return false;
     }
     
     // Difficulty
