@@ -1,6 +1,6 @@
 "use client";
 
-import React, { forwardRef } from "react";
+import React, { forwardRef, useId } from "react";
 import clsx from "clsx";
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement> {
@@ -13,7 +13,8 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement |
 
 export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputProps>(
   ({ className, label, helperText, error, multiline, rows = 3, id, ...props }, ref) => {
-    const inputId = id || `input-${Math.random().toString(36).substring(2, 9)}`;
+    const generatedId = useId();
+    const inputId = id || generatedId;
     const Component = multiline ? "textarea" : "input";
 
     return (

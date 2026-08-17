@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -10,9 +10,15 @@ import { Card } from "@/components/ui/Card";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { signInWithEmail, signUpWithEmail, signInWithGoogle } = useAuth();
+  const { signInWithEmail, signUpWithEmail, signInWithGoogle, user } = useAuth();
   const { t } = useTranslation();
   
+  useEffect(() => {
+    if (user) {
+      router.push("/discover");
+    }
+  }, [user, router]);
+
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -49,10 +55,10 @@ export default function LoginPage() {
     setIsGoogleLoading(true);
     try {
       await signInWithGoogle();
-      router.push("/discover");
+      // Note: we don't push to /discover here because signInWithGoogle now uses redirect.
+      // The useEffect above will handle the redirect when the user state updates.
     } catch (err: any) {
       setError(err.message || t("common.error"));
-    } finally {
       setIsGoogleLoading(false);
     }
   };
