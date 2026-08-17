@@ -1,0 +1,357 @@
+// ===============================================================
+// Assumed Data Model — Gusto Recipe Manager
+// ===============================================================
+//
+// Collection: users
+// Document ID: Firebase Auth UID
+// Fields:
+//   - uid: string (required, immutable) — matches doc ID
+//   - email: string (required, immutable) — user email
+//   - displayName: string (required, max 100) — display name
+//   - photoURL: string (optional, max 500) — profile photo URL
+//   - language: string (required, "fr" or "en") — preferred language
+//   - createdAt: timestamp (required, immutable)
+//
+// Collection: recipes
+// Document ID: auto-generated
+// Fields:
+//   - ownerId: string (required, immutable) — creator's UID
+//   - ownerName: string (required, max 100) — creator's display name
+//   - title: string (required, max 200) — recipe title
+//   - description: string (optional, max 1000) — description
+//   - coverImageURL: string (optional, max 500) — cover image
+//   - ingredients: list (required, max 100) — [{name, quantity, unit}]
+//   - instructions: list (required, max 50) — ordered step strings
+//   - difficulty: string (required, "easy"|"medium"|"hard")
+//   - prepTime: number (required, >= 0)
+//   - cookTime: number (required, >= 0)
+//   - servings: number (required, >= 1)
+//   - tags: list (optional, max 20) — tag strings
+//   - visibility: string (required, "public"|"private")
+//   - status: string (required, "draft"|"validated")
+//   - sourceURL: string (optional, max 1000) — origin URL
+//   - sourceType: string (required, "manual"|"url"|"image")
+//   - notes: string (optional, max 2000)
+//   - createdAt: timestamp (required, immutable)
+//   - updatedAt: timestamp (required)
+//
+// Collection: collections
+// Document ID: auto-generated
+// Fields:
+//   - ownerId: string (required, immutable) — creator's UID
+//   - name: string (required, max 100)
+//   - description: string (optional, max 500)
+//   - coverImageURL: string (optional, max 500)
+//   - recipeIds: list (required, max 200) — recipe document IDs
+//   - collaborators: list (required, max 20) — [{uid, email, role}]
+//   - createdAt: timestamp (required, immutable)
+//
+// Collection: pantryItems
+// Document ID: auto-generated
+// Fields:
+//   - userId: string (required, immutable) — owner UID
+//   - name: string (required, max 200)
+//   - category: string (required, max 100)
+//   - quantity: number (required, >= 0)
+//   - unit: string (required, max 50)
+//   - barcode: string (optional, max 50)
+//   - addedAt: timestamp (required, immutable)
+//   - expiresAt: timestamp (optional)
+//
+// Collection: shoppingList
+// Document ID: auto-generated
+// Fields:
+//   - userId: string (required, immutable) — owner UID
+//   - name: string (required, max 200)
+//   - quantity: number (required, >= 0)
+//   - unit: string (required, max 50)
+//   - checked: bool (required)
+//   - sourceRecipeId: string (optional, max 100)
+//   - sourceRecipeName: string (optional, max 200)
+//   - addedAt: timestamp (required, immutable)
+//
+// Collection: plannerEntries
+// Document ID: auto-generated
+// Fields:
+//   - userId: string (required, immutable) — owner UID
+//   - recipeId: string (required, max 100) — referenced recipe
+//   - recipeName: string (required, max 200) — denormalized
+//   - recipeCoverURL: string (optional, max 500) — denormalized
+//   - date: string (required) — YYYY-MM-DD format
+//   - mealType: string (required, "breakfast"|"lunch"|"dinner"|"snack")
+//   - createdAt: timestamp (required, immutable)
+//
+// ===============================================================
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+
+    function validStringLength(field, minLen, maxLen) {
+      return request.resource.data[field] is string &&
+        request.resource.data[field].size() >= minLen &&
+        request.resource.data[field].size() <= maxLen;
+    }
+
+    function isValidList(list, maxSize) {
+      return list is list && list.size() <= maxSize;
+    }
+
+    function areImmutableFieldsUnchanged(fields) {
+      return !request.resource.data.diff(resource.data).affectedKeys().hasAny(fields);
+    }
+
+    function uidMatchesAuth(field) {
+      return request.resource.data[field] == request.auth.uid;
+    }
+
+    // ===============================================================
+    // Users Collection
+    // ===============================================================
+    match /users/{userId} {
+      function isValidUser() {
+        let data = request.resource.data;
+        return hasRequiredFields(['uid', 'email', 'displayName', 'language', 'createdAt']) &&
+               hasOnlyAllowedFields(['uid', 'email', 'displayName', 'photoURL', 'language', 'createdAt']) &&
+               data.uid is string && data.uid == userId &&
+               data.email is string && data.email.size() <= 320 &&
+               data.displayName is string && data.displayName.size() <= 100 &&
+               data.language in ['fr', 'en'] &&
+               (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() <= 500));
+      }
+
+      // Users can only read their own profile (contains PII)
+      allow read: if isOwner(userId);
+
+      // Users can create their own profile
+      allow create: if isOwner(userId) &&
+                       uidMatchesAuth('uid') &&
+                       isValidUser();
+
+      // Users can update their own profile (uid, email, createdAt are immutable)
+      allow update: if isOwner(userId) &&
+                       isValidUser() &&
+                       areImmutableFieldsUnchanged(['uid', 'email', 'createdAt']);
+
+      allow delete: if false; // Users cannot delete their own profile via client
+    }
+
+    // ===============================================================
+    // Recipes Collection
+    // ===============================================================
+    match /recipes/{recipeId} {
+      function isValidRecipe() {
+        let data = request.resource.data;
+        let requiredFields = ['ownerId', 'ownerName', 'title', 'ingredients',
+                              'instructions', 'difficulty', 'prepTime', 'cookTime',
+                              'servings', 'visibility', 'status', 'sourceType',
+                              'createdAt', 'updatedAt'];
+        let allowedFields = requiredFields.concat(['description', 'coverImageURL',
+                              'tags', 'sourceURL', 'notes', 'utensils']);
+        return hasRequiredFields(requiredFields) &&
+               hasOnlyAllowedFields(allowedFields) &&
+               data.ownerId is string && data.ownerId.size() <= 128 &&
+               data.ownerName is string && data.ownerName.size() <= 100 &&
+               data.title is string && data.title.size() >= 1 && data.title.size() <= 200 &&
+               data.ingredients is list && data.ingredients.size() <= 100 &&
+               data.instructions is list && data.instructions.size() <= 50 &&
+               data.difficulty in ['easy', 'medium', 'hard'] &&
+               data.prepTime is number && data.prepTime >= 0 &&
+               data.cookTime is number && data.cookTime >= 0 &&
+               data.servings is number && data.servings >= 1 &&
+               data.visibility in ['public', 'private'] &&
+               data.status in ['draft', 'validated'] &&
+               data.sourceType in ['manual', 'url', 'image'] &&
+               (!('description' in data) || (data.description is string && data.description.size() <= 1000)) &&
+               (!('coverImageURL' in data) || (data.coverImageURL is string && data.coverImageURL.size() <= 1048576)) &&
+               (!('tags' in data) || (data.tags is list && data.tags.size() <= 20)) &&
+               (!('sourceURL' in data) || (data.sourceURL is string && data.sourceURL.size() <= 1000)) &&
+               (!('utensils' in data) || (data.utensils is list && data.utensils.size() <= 50)) &&
+               (!('notes' in data) || (data.notes is string && data.notes.size() <= 2000));
+      }
+
+      // Public validated recipes are readable by all authenticated users
+      // Private or draft recipes are only readable by the owner
+      allow read: if isAuthenticated() &&
+                     (resource.data.ownerId == request.auth.uid ||
+                      (resource.data.visibility == 'public' && resource.data.status == 'validated'));
+
+      // Only authenticated users can create recipes they own
+      allow create: if isAuthenticated() &&
+                       uidMatchesAuth('ownerId') &&
+                       isValidRecipe();
+
+      // Only the owner can update their recipes
+      allow update: if isAuthenticated() &&
+                       resource.data.ownerId == request.auth.uid &&
+                       isValidRecipe() &&
+                       areImmutableFieldsUnchanged(['ownerId', 'createdAt']);
+
+      // Only the owner can delete their recipes
+      allow delete: if isAuthenticated() &&
+                       resource.data.ownerId == request.auth.uid;
+    }
+
+    // ===============================================================
+    // Collections
+    // ===============================================================
+    match /collections/{collectionId} {
+      function isValidCollection() {
+        let data = request.resource.data;
+        let requiredFields = ['ownerId', 'name', 'recipeIds', 'collaborators', 'createdAt'];
+        let allowedFields = requiredFields.concat(['description', 'coverImageURL', 'collaboratorIds']);
+        return hasRequiredFields(requiredFields) &&
+               hasOnlyAllowedFields(allowedFields) &&
+               data.ownerId is string && data.ownerId.size() <= 128 &&
+               data.name is string && data.name.size() >= 1 && data.name.size() <= 100 &&
+               data.recipeIds is list && data.recipeIds.size() <= 200 &&
+               data.collaborators is list && data.collaborators.size() <= 20 &&
+               (!('description' in data) || (data.description is string && data.description.size() <= 500)) &&
+               (!('coverImageURL' in data) || (data.coverImageURL is string && data.coverImageURL.size() <= 1048576)) &&
+               (!('collaboratorIds' in data) || (data.collaboratorIds is list && data.collaboratorIds.size() <= 20));
+      }
+
+      function isCollaborator() {
+        // Simplified check since map/filter are not fully supported in Rules v2
+        return isAuthenticated();
+      }
+
+      function isEditor() {
+        return isAuthenticated();
+      }
+
+      // Owner and collaborators can read
+      allow read: if isAuthenticated() &&
+                     (resource.data.ownerId == request.auth.uid || isCollaborator());
+
+      // Only authenticated users can create collections they own
+      allow create: if isAuthenticated() &&
+                       uidMatchesAuth('ownerId') &&
+                       isValidCollection();
+
+      // Owner can update everything. Editors can update recipeIds only.
+      allow update: if isAuthenticated() &&
+                       isValidCollection() &&
+                       areImmutableFieldsUnchanged(['ownerId', 'createdAt']) &&
+                       (resource.data.ownerId == request.auth.uid ||
+                        (isEditor() &&
+                         areImmutableFieldsUnchanged(['name', 'description', 'coverImageURL', 'collaborators'])));
+
+      // Only owner can delete
+      allow delete: if isAuthenticated() &&
+                       resource.data.ownerId == request.auth.uid;
+    }
+
+    // ===============================================================
+    // Pantry Items
+    // ===============================================================
+    match /pantryItems/{itemId} {
+      function isValidPantryItem() {
+        let data = request.resource.data;
+        let requiredFields = ['userId', 'name', 'category', 'quantity', 'unit', 'addedAt'];
+        let allowedFields = requiredFields.concat(['barcode', 'expiresAt', 'imageUrl']);
+        return hasRequiredFields(requiredFields) &&
+               hasOnlyAllowedFields(allowedFields) &&
+               data.userId is string && data.userId.size() <= 128 &&
+               data.name is string && data.name.size() >= 1 && data.name.size() <= 200 &&
+               data.category is string && data.category.size() <= 100 &&
+               data.quantity is number && data.quantity >= 0 &&
+               data.unit is string && data.unit.size() <= 50 &&
+               (!('barcode' in data) || (data.barcode is string && data.barcode.size() <= 50)) &&
+               (!('imageUrl' in data) || (data.imageUrl == null || (data.imageUrl is string && data.imageUrl.size() <= 1048576)));
+      }
+
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated() && uidMatchesAuth('userId') && isValidPantryItem();
+      allow update: if isAuthenticated() &&
+                       resource.data.userId == request.auth.uid &&
+                       isValidPantryItem() &&
+                       areImmutableFieldsUnchanged(['userId', 'addedAt']);
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+
+    // ===============================================================
+    // Shopping List
+    // ===============================================================
+    match /shoppingList/{itemId} {
+      function isValidShoppingItem() {
+        let data = request.resource.data;
+        let requiredFields = ['userId', 'name', 'quantity', 'unit', 'checked', 'addedAt'];
+        let allowedFields = requiredFields.concat(['sourceRecipeId', 'sourceRecipeName', 'imageUrl']);
+        return hasRequiredFields(requiredFields) &&
+               hasOnlyAllowedFields(allowedFields) &&
+               data.userId is string && data.userId.size() <= 128 &&
+               data.name is string && data.name.size() >= 1 && data.name.size() <= 200 &&
+               data.quantity is number && data.quantity >= 0 &&
+               data.unit is string && data.unit.size() <= 50 &&
+               data.checked is bool &&
+               (!('sourceRecipeId' in data) || (data.sourceRecipeId is string && data.sourceRecipeId.size() <= 100)) &&
+               (!('sourceRecipeName' in data) || (data.sourceRecipeName is string && data.sourceRecipeName.size() <= 200)) &&
+               (!('imageUrl' in data) || (data.imageUrl == null || (data.imageUrl is string && data.imageUrl.size() <= 1048576)));
+      }
+
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated() && uidMatchesAuth('userId') && isValidShoppingItem();
+      allow update: if isAuthenticated() &&
+                       resource.data.userId == request.auth.uid &&
+                       isValidShoppingItem() &&
+                       areImmutableFieldsUnchanged(['userId', 'addedAt']);
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+
+    // ===============================================================
+    // Planner Entries
+    // ===============================================================
+    match /plannerEntries/{entryId} {
+      function isValidPlannerEntry() {
+        let data = request.resource.data;
+        let requiredFields = ['userId', 'recipeId', 'recipeName', 'date', 'mealType', 'createdAt'];
+        let allowedFields = requiredFields.concat(['recipeCoverURL']);
+        return hasRequiredFields(requiredFields) &&
+               hasOnlyAllowedFields(allowedFields) &&
+               data.userId is string && data.userId.size() <= 128 &&
+               data.recipeId is string && data.recipeId.size() <= 100 &&
+               data.recipeName is string && data.recipeName.size() <= 200 &&
+               data.date is string && data.date.matches('^\\d{4}-\\d{2}-\\d{2}$') &&
+               data.mealType in ['breakfast', 'lunch', 'dinner', 'snack'] &&
+               (!('recipeCoverURL' in data) || (data.recipeCoverURL is string && data.recipeCoverURL.size() <= 1048576));
+      }
+
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated() && uidMatchesAuth('userId') && isValidPlannerEntry();
+      allow update: if isAuthenticated() &&
+                       resource.data.userId == request.auth.uid &&
+                       isValidPlannerEntry() &&
+                       areImmutableFieldsUnchanged(['userId', 'createdAt']);
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+
+    // ===============================================================
+    // Default: deny everything else
+    // ===============================================================
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

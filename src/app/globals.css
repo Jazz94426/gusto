@@ -1,0 +1,222 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* —— Color Palette —— */
+  --color-cream: #FDF6EE;
+  --color-cream-dark: #F5EDE3;
+  --color-terracotta: #C75B39;
+  --color-terracotta-light: #E8845F;
+  --color-terracotta-dark: #A44828;
+  --color-burnt-orange: #D4793A;
+  --color-charcoal: #2D2926;
+  --color-brown: #5C4A3A;
+  --color-sage: #8B9E7E;
+  --color-sage-light: #A8BF9A;
+  --color-stone: #B8AFA6;
+  --color-stone-light: #D4CEC8;
+  --color-white: #FFFFFF;
+  --color-error: #C44536;
+  --color-error-light: #F8D7DA;
+
+  /* —— Typography —— */
+  --font-heading: "DM Serif Display", serif;
+  --font-body: "Inter", sans-serif;
+
+  /* —— Shadows —— */
+  --shadow-card: 0 2px 12px rgba(45, 41, 38, 0.06);
+  --shadow-card-hover: 0 8px 24px rgba(45, 41, 38, 0.10);
+  --shadow-elevated: 0 12px 36px rgba(45, 41, 38, 0.12);
+  --shadow-nav: 0 -1px 12px rgba(45, 41, 38, 0.06);
+  --shadow-modal: 0 20px 60px rgba(45, 41, 38, 0.20);
+
+  /* —— Radius —— */
+  --radius-card: 1rem;
+  --radius-button: 0.75rem;
+  --radius-input: 0.75rem;
+  --radius-pill: 9999px;
+  --radius-modal: 1.25rem;
+}
+
+/* —— Global Resets & Base Styles —— */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior-y: none;
+}
+
+body {
+  background-color: var(--color-cream);
+  color: var(--color-charcoal);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  min-height: 100dvh;
+  overscroll-behavior-y: none;
+}
+
+/* —— Typography Utilities —— */
+h1, h2, h3, h4, h5, h6,
+.font-heading {
+  font-family: var(--font-heading);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+/* —— Scrollbar Styling —— */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-stone-light);
+  border-radius: var(--radius-pill);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-stone);
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* —— Focus Styles —— */
+*:focus-visible {
+  outline: 2px solid var(--color-terracotta);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* —— Selection —— */
+::selection {
+  background-color: var(--color-terracotta-light);
+  color: var(--color-white);
+}
+
+/* —— Animations —— */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scale-in {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 1.5s infinite;
+  background: linear-gradient(
+    90deg,
+    var(--color-cream-dark) 25%,
+    var(--color-cream) 50%,
+    var(--color-cream-dark) 75%
+  );
+  background-size: 200% 100%;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.2s ease-out;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes fade-in-up {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float 4s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out forwards;
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+/* —— Mobile Safe Area Utilities —— */
+.pb-safe {
+  padding-bottom: max(env(safe-area-inset-bottom, 0px), 0.5rem);
+}
+.pt-safe {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+/* —— Page Container —— */
+.page-container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .page-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .page-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
