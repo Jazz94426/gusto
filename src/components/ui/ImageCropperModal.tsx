@@ -37,8 +37,10 @@ export function ImageCropperModal({
       const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels);
       onCropComplete(croppedImage);
       onClose();
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
+      alert(e.message || "Une erreur est survenue lors du recadrage.");
+      onClose();
     } finally {
       setIsProcessing(false);
     }

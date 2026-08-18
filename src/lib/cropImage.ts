@@ -6,9 +6,18 @@ export const createImage = (url: string): Promise<HTMLImageElement> =>
   new Promise((resolve, reject) => {
     const image = new Image();
     image.addEventListener('load', () => resolve(image));
-    image.addEventListener('error', (error) => reject(error));
-    image.setAttribute('crossOrigin', 'anonymous');
-    image.src = url;
+    image.addEventListener('error', (error) => {
+      console.error('Image load error for URL starting with:', url.substring(0, 30), error);
+      reject(new Error(`Failed to load image for cropping. URL starts with: ${url.substring(0, 30)}`));
+    });
+    
+    // Proxy external images to bypass CORS
+    if (url.startsWith('http') && !url.includes('/api/proxy-image')) {
+      image.setAttribute('crossOrigin', 'anonymous');
+      image.src = `/api/proxy-image?url=${encodeURIComponent(url)}`;
+    } else {
+      image.src = url;
+    }
   });
 
 export function getRadianAngle(degreeValue: number) {
@@ -75,7 +84,12 @@ export default async function getCroppedImg(
   ctx.putImageData(data, 0, 0);
 
   // As a base64 data url
-  return canvas.toDataURL('image/jpeg', 0.9);
+  try {
+    return canvas.toDataURL('image/jpeg', 0.9);
+  } catch (e: any) {
+    console.error("Canvas toDataURL failed. Canvas might be tainted:", e);
+    throw new Error("Unable to crop this image due to cross-origin restrictions (CORS). Try uploading a new image instead.");
+  }
 }
 
 function rotateSize(width: number, height: number, rotation: number) {
