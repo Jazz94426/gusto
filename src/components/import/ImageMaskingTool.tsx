@@ -170,6 +170,7 @@ export function ImageMaskingTool({ onSuccess }: ImageMaskingToolProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [cropImageIndex, setCropImageIndex] = useState<number | null>(null);
+  const [coverImageIndex, setCoverImageIndex] = useState<number | null>(null);
   
   const maskersRef = useRef<(SingleMaskerRef | null)[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -211,6 +212,8 @@ export function ImageMaskingTool({ onSuccess }: ImageMaskingToolProps) {
       const base64Images: {base64: string, mimeType: string}[] = [];
       
       for (let i = 0; i < images.length; i++) {
+        if (i === coverImageIndex) continue; // Skip cover image for AI extraction
+        
         const masker = maskersRef.current[i];
         if (masker) {
           const b64 = masker.getMaskedBase64();
@@ -220,11 +223,20 @@ export function ImageMaskingTool({ onSuccess }: ImageMaskingToolProps) {
         }
       }
       
-      if (base64Images.length === 0) {
+      if (base64Images.length === 0 && coverImageIndex === null) {
         throw new Error("No images to extract");
       }
       
-      const extractedData = await extractRecipeFromImages(base64Images);
+      let extractedData = {};
+      if (base64Images.length > 0) {
+        extractedData = await extractRecipeFromImages(base64Images);
+      }
+      
+      if (coverImageIndex !== null) {
+        // We need to pass the raw image. images[i] is a blob URL or base64.
+        (extractedData as any).coverImageURL = images[coverImageIndex];
+      }
+
       onSuccess({...extractedData, sourceType: "image"});
       
     } catch (err) {
@@ -279,12 +291,22 @@ export function ImageMaskingTool({ onSuccess }: ImageMaskingToolProps) {
           <div className="flex flex-col gap-6">
             {images.map((src, idx) => (
               <div key={idx} className="relative group">
+                <div className="absolute top-4 left-4 z-20">
+                  <Button 
+                    variant={coverImageIndex === idx ? "primary" : "secondary"}
+                    size="sm" 
+                    onClick={() => setCoverImageIndex(coverImageIndex === idx ? null : idx)}
+                    className={`transition-opacity shadow-sm text-xs py-1.5 px-3 h-auto ${coverImageIndex === idx ? 'opacity-100' : 'opacity-100 bg-white/90'}`}
+                  >
+                    {coverImageIndex === idx ? "★ Image de couverture" : "Définir comme couverture"}
+                  </Button>
+                </div>
                 <div className="absolute top-4 right-4 z-20">
                   <Button 
                     variant="secondary" 
                     size="sm" 
                     onClick={() => setCropImageIndex(idx)}
-                    className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 shadow-sm text-xs py-1.5 px-3 h-auto"
+                    className="opacity-100 transition-opacity bg-white/90 shadow-sm text-xs py-1.5 px-3 h-auto"
                   >
                     Recadrer l'image
                   </Button>
@@ -299,8 +321,13 @@ export function ImageMaskingTool({ onSuccess }: ImageMaskingToolProps) {
           </div>
 
           <div className="flex justify-end space-x-4 pt-4 border-t border-stone-light/30">
-            <Button variant="ghost" onClick={() => setImages([])}>Recommencer</Button>
-            <Button onClick={handleExtract} isLoading={loading}>Extraire la recette ({images.length} {images.length > 1 ? 'images' : 'image'})</Button>
+            <Button variant="ghost" onClick={() => {
+              setImages([]);
+              setCoverImageIndex(null);
+            }}>Recommencer</Button>
+            <Button onClick={handleExtract} isLoading={loading}>
+              Extraire la recette ({images.length - (coverImageIndex !== null ? 1 : 0)} {images.length - (coverImageIndex !== null ? 1 : 0) > 1 ? 'images' : 'image'})
+            </Button>
           </div>
 
           {error && <div className="text-red-500 text-sm text-center">{error}</div>}

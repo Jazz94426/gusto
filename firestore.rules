@@ -168,7 +168,7 @@ service cloud.firestore {
                               'servings', 'visibility', 'status', 'sourceType',
                               'createdAt', 'updatedAt'];
         let allowedFields = requiredFields.concat(['description', 'coverImageURL',
-                              'tags', 'sourceURL', 'notes', 'utensils']);
+                              'tags', 'sourceURL', 'notes', 'utensils', 'sourceRecipeId']);
         return hasRequiredFields(requiredFields) &&
                hasOnlyAllowedFields(allowedFields) &&
                data.ownerId is string && data.ownerId.size() <= 128 &&
@@ -186,7 +186,8 @@ service cloud.firestore {
                (!('description' in data) || (data.description is string && data.description.size() <= 2000)) &&
                (!('coverImageURL' in data) || (data.coverImageURL is string && data.coverImageURL.size() <= 3145728)) &&
                (!('tags' in data) || (data.tags is list && data.tags.size() <= 20)) &&
-               (!('sourceURL' in data) || (data.sourceURL is string && data.sourceURL.size() <= 1000)) &&
+               (!('sourceURL' in data) || (data.sourceURL is string && data.sourceURL.size() <= 2048)) &&
+               (!('sourceRecipeId' in data) || (data.sourceRecipeId is string && data.sourceRecipeId.size() <= 100)) &&
                (!('utensils' in data) || (data.utensils is list && data.utensils.size() <= 50)) &&
                (!('notes' in data) || (data.notes is string && data.notes.size() <= 2000));
       }

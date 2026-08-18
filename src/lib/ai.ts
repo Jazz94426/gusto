@@ -33,7 +33,9 @@ Retourne un JSON avec cette structure exacte (sans aucun bloc markdown ni format
 Si des ustensiles spécifiques sont nécessaires, renvoie un tableau contenant uniquement leurs identifiants parmi cette liste stricte:
 "food_container", "kitchen_scale", "measuring_jug", "mixing_bowl", "whisk", "blender", "oven", "microwave", "mold", "pan", "pastry_roll", "piping_bag".
 
-Si tu ne trouves pas certaines informations, utilise null ou des valeurs par défaut raisonnables.`;
+Si tu ne trouves pas certaines informations, utilise null ou des valeurs par défaut raisonnables.
+Convertis IMPÉRATIVEMENT toutes les unités impériales (comme "tasse" (cup), "once" (oz), "livre" (lb), etc.) en unités métriques (g, kg, ml, L) selon la densité de l'ingrédient.
+Pour les conversions en grammes (g) ou en millilitres (ml), arrondis TOUJOURS à la dizaine la plus proche (par exemple, 312g devient 310g ou 320g, pas de valeurs précises inutiles) et évite absolument les nombres à virgule.`;
 
   const interaction = await client.interactions.create({
     model: MODEL_NAME,
@@ -78,7 +80,9 @@ Retourne un JSON avec cette structure exacte:
 Si des ustensiles spécifiques sont nécessaires, renvoie un tableau contenant uniquement leurs identifiants parmi cette liste stricte:
 "food_container", "kitchen_scale", "measuring_jug", "mixing_bowl", "whisk", "blender", "oven", "microwave", "mold", "pan", "pastry_roll", "piping_bag".
 
-Ignore les zones blanches/masquées de l'image. Si du texte est partiellement visible, fais de ton mieux pour l'interpréter.`;
+Ignore les zones blanches/masquées de l'image. Si du texte est partiellement visible, fais de ton mieux pour l'interpréter.
+Convertis IMPÉRATIVEMENT toutes les unités impériales (comme "tasse" (cup), "once" (oz), "livre" (lb), etc.) en unités métriques (g, kg, ml, L) selon la densité de l'ingrédient.
+Pour les conversions en grammes (g) ou en millilitres (ml), arrondis TOUJOURS à la dizaine la plus proche (par exemple, 312g devient 310g ou 320g, pas de valeurs précises inutiles) et évite absolument les nombres à virgule.`;
 
   const inputParts: any[] = [{ type: "text", text: prompt }];
   images.forEach(img => {

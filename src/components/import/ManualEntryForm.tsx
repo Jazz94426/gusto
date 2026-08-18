@@ -648,7 +648,6 @@ export function ManualEntryForm({
                         { value: "pièce", label: "pièce" },
                         { value: "c.à.s", label: "c.à.s" },
                         { value: "c.à.c", label: "c.à.c" },
-                        { value: "tasse", label: "tasse" },
                         { value: "pincée", label: "pincée" },
                       ]}
                     />
