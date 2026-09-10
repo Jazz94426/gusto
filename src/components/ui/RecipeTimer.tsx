@@ -18,35 +18,19 @@ export default function RecipeTimer({ durationMinutes, label }: RecipeTimerProps
   const [ringCount, setRingCount] = useState(0);
 
   const audioContextRef = useRef<AudioContext | null>(null);
-  const audioBufferRef = useRef<AudioBuffer | null>(null);
-  const currentSourceRef = useRef<AudioBufferSourceNode | null>(null);
+  const activeOscillatorsRef = useRef<OscillatorNode[]>([]);
+  const alarmTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    // Create AudioContext and load sound (Web Audio API won't stop background music)
-    const initAudio = async () => {
-      try {
-        const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
-        if (!AudioContextClass) return;
-        
-        audioContextRef.current = new AudioContextClass();
-        
-        const response = await fetch('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
-        const arrayBuffer = await response.arrayBuffer();
-        
-        audioContextRef.current.decodeAudioData(arrayBuffer, (buffer) => {
-          audioBufferRef.current = buffer;
-        }, (error) => {
-          console.error('Audio decode error', error);
-        });
-      } catch (err) {
-        console.error('Failed to init audio', err);
-      }
-    };
-    
-    initAudio();
+    // Create AudioContext (Web Audio API won't stop background music)
+    const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+    if (AudioContextClass) {
+      audioContextRef.current = new AudioContextClass();
+    }
 
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
+      stopAudio();
       if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
         audioContextRef.current.close().catch(() => {});
       }
@@ -54,32 +38,75 @@ export default function RecipeTimer({ durationMinutes, label }: RecipeTimerProps
   }, []);
 
   const playAudio = () => {
-    if (!audioContextRef.current || !audioBufferRef.current) return;
+    if (!audioContextRef.current) return;
+    const ctx = audioContextRef.current;
     
-    if (audioContextRef.current.state === 'suspended') {
-      audioContextRef.current.resume().catch(() => {});
+    if (ctx.state === 'suspended') {
+      ctx.resume().catch(() => {});
     }
     
-    const source = audioContextRef.current.createBufferSource();
-    source.buffer = audioBufferRef.current;
-    source.connect(audioContextRef.current.destination);
+    const now = ctx.currentTime;
+    activeOscillatorsRef.current = [];
     
-    source.onended = () => {
+    // A soft, pleasant chime sequence (like a modern phone alarm)
+    // Notes: Eb5, F5, G5, Bb5 (Pentatonic, very harmonious)
+    const melody = [
+      { f: 622.25, time: 0 },
+      { f: 698.46, time: 0.15 },
+      { f: 783.99, time: 0.30 },
+      { f: 932.33, time: 0.45 },
+    ];
+    
+    // Two bursts per ring cycle
+    const bursts = [0, 1.2];
+    
+    bursts.forEach(burstStart => {
+      melody.forEach(note => {
+        const time = burstStart + note.time;
+        
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        
+        // Sine wave is very soft and pleasant (no harsh harmonics)
+        osc.type = 'sine';
+        osc.frequency.value = note.f;
+        
+        // Percussive bell-like envelope
+        gain.gain.setValueAtTime(0, now + time);
+        // Quick attack
+        gain.gain.linearRampToValueAtTime(0.15, now + time + 0.02);
+        // Smooth, long decay
+        gain.gain.exponentialRampToValueAtTime(0.001, now + time + 0.6);
+        
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        
+        osc.start(now + time);
+        osc.stop(now + time + 0.6);
+        
+        activeOscillatorsRef.current.push(osc);
+      });
+    });
+    
+    // Schedule the next loop trigger after the bursts finish
+    alarmTimeoutRef.current = setTimeout(() => {
       setRingCount(prev => prev + 1);
-    };
-    
-    source.start(0);
-    currentSourceRef.current = source;
+    }, 2500);
   };
 
   const stopAudio = () => {
-    if (currentSourceRef.current) {
-      currentSourceRef.current.onended = null;
-      try {
-        currentSourceRef.current.stop();
-      } catch (e) {}
-      currentSourceRef.current = null;
+    if (alarmTimeoutRef.current) {
+      clearTimeout(alarmTimeoutRef.current);
+      alarmTimeoutRef.current = null;
     }
+    
+    activeOscillatorsRef.current.forEach(osc => {
+      try {
+        osc.stop();
+        osc.disconnect();
+      } catch (e) {}
+    });
+    activeOscillatorsRef.current = [];
   };
 
   useEffect(() => {
