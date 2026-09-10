@@ -290,7 +290,7 @@ export default function CollectionDetailPage() {
       <div className="mb-2">
         <button 
           onClick={() => router.back()}
-          className="flex items-center text-stone hover:text-terracotta transition-colors font-medium text-sm group"
+          className="flex items-center text-gray-500 hover:text-terracotta transition-colors font-medium text-sm group"
         >
           <ArrowLeft className="w-5 h-5 mr-1 group-hover:-translate-x-1 transition-transform" />
           Retour
@@ -307,8 +307,8 @@ export default function CollectionDetailPage() {
         <div className="flex-grow">
           <div className="flex flex-col md:flex-row md:justify-between items-start mb-4 gap-4">
             <div>
-              <h1 className="text-5xl md:text-6xl font-heading font-black text-charcoal mb-4 tracking-tight">{collectionData.name}</h1>
-              <p className="text-stone-500 text-lg mb-4 max-w-2xl">{collectionData.description}</p>
+              <h1 className="text-5xl md:text-6xl font-heading font-black text-black mb-4 tracking-tight">{collectionData.name}</h1>
+              <p className="text-gray-500-500 text-lg mb-4 max-w-2xl">{collectionData.description}</p>
             </div>
             <div className="flex space-x-2">
               <Button variant="ghost" onClick={() => setIsCollabExpanded(!isCollabExpanded)}>
@@ -324,7 +324,7 @@ export default function CollectionDetailPage() {
               )}
             </div>
           </div>
-          <div className="flex items-center space-x-3 text-sm text-stone-500 font-semibold bg-cream-dark px-4 py-2 rounded-full w-fit">
+          <div className="flex items-center space-x-3 text-sm text-gray-500-500 font-semibold bg-gray-100 px-4 py-2 rounded-full w-fit">
             <span>{recipes.length} recettes</span>
             <span>•</span>
             <span>Créée le {(collectionData.createdAt as any)?.toDate ? (collectionData.createdAt as any).toDate().toLocaleDateString() : (collectionData.createdAt as any)?.toLocaleDateString ? (collectionData.createdAt as any).toLocaleDateString() : 'Récemment'}</span>
@@ -338,16 +338,16 @@ export default function CollectionDetailPage() {
           <h3 className="text-lg font-heading mb-4">Collaborateurs</h3>
           <div className="space-y-4">
             {collectionData.collaborators?.map(collab => (
-              <div key={collab.uid} className="flex items-center justify-between bg-cream p-3 rounded-xl border border-stone/20">
+              <div key={collab.uid} className="flex items-center justify-between bg-gray-50 p-3 rounded-xl border border-stone/20">
                 <div className="flex items-center space-x-3">
                   <Avatar initials={collab.email.charAt(0).toUpperCase()} size="sm" />
                   <div>
-                    <p className="text-sm font-medium text-charcoal">{collab.email}</p>
-                    <p className="text-xs text-brown capitalize">{collab.role}</p>
+                    <p className="text-sm font-medium text-black">{collab.email}</p>
+                    <p className="text-xs text-gray-500 capitalize">{collab.role}</p>
                   </div>
                 </div>
                 {isOwner && (
-                  <button onClick={() => handleRemoveCollaborator(collab)} className="text-stone hover:text-red-500 transition-colors">
+                  <button onClick={() => handleRemoveCollaborator(collab)} className="text-gray-500 hover:text-red-500 transition-colors">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
                   </button>
                 )}
@@ -387,7 +387,7 @@ export default function CollectionDetailPage() {
       {/* Recipes Section */}
       <div>
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-3xl font-heading font-black text-charcoal tracking-tight">Recettes</h2>
+          <h2 className="text-3xl font-heading font-black text-black tracking-tight">Recettes</h2>
           <Button onClick={openAddRecipeModal} variant="ghost" className="text-terracotta font-bold hover:bg-terracotta/10">
             {t("collections.add_recipes")}
           </Button>
@@ -404,7 +404,7 @@ export default function CollectionDetailPage() {
             {recipes.map(recipe => (
               <div key={recipe.id} className="relative group h-full">
                 <div 
-                  className="absolute top-2 right-2 z-10 p-1.5 bg-cream rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer shadow-sm text-stone hover:text-red-500"
+                  className="absolute top-2 right-2 z-10 p-1.5 bg-gray-50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer shadow-sm text-gray-500 hover:text-red-500"
                   onClick={(e) => { e.stopPropagation(); handleRemoveRecipe(recipe.id); }}
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
@@ -419,11 +419,11 @@ export default function CollectionDetailPage() {
                     )}
                   </div>
                   <div className="p-5 flex flex-col flex-grow">
-                    <h3 className="font-heading font-black text-xl mb-2 text-charcoal line-clamp-1">{recipe.title}</h3>
-                    <p className="text-sm text-stone-500 mb-4 line-clamp-2 flex-grow">{recipe.description}</p>
+                    <h3 className="font-heading font-black text-xl mb-2 text-black line-clamp-1">{recipe.title}</h3>
+                    <p className="text-sm text-gray-500-500 mb-4 line-clamp-2 flex-grow">{recipe.description}</p>
                     <div className="mt-auto flex items-center space-x-2">
-                      <Badge variant="outline" size="sm" className="bg-cream-dark border-none text-stone-600">{recipe.prepTime + recipe.cookTime} min</Badge>
-                      <Badge variant="outline" size="sm" className="bg-cream-dark border-none text-stone-600">{t(`recipe.difficulty_${recipe.difficulty}`)}</Badge>
+                      <Badge variant="outline" size="sm" className="bg-gray-100 border-none text-gray-500-600">{recipe.prepTime + recipe.cookTime} min</Badge>
+                      <Badge variant="outline" size="sm" className="bg-gray-100 border-none text-gray-500-600">{t(`recipe.difficulty_${recipe.difficulty}`)}</Badge>
                     </div>
                   </div>
                 </div>
@@ -437,7 +437,7 @@ export default function CollectionDetailPage() {
       <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} title="Modifier la collection">
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-charcoal mb-1">Image de couverture</label>
+            <label className="block text-sm font-medium text-black mb-1">Image de couverture</label>
             <div className="flex items-center space-x-4">
               <div className="relative w-24 h-24 bg-stone/10 rounded-2xl flex-shrink-0 overflow-hidden flex items-center justify-center border border-dashed border-stone/30">
                 {coverImagePreview ? (
@@ -458,7 +458,7 @@ export default function CollectionDetailPage() {
                     </button>
                   </>
                 ) : (
-                  <Upload className="w-6 h-6 text-stone/50" />
+                  <Upload className="w-6 h-6 text-gray-500/50" />
                 )}
               </div>
               <div className="flex-grow">
@@ -476,7 +476,7 @@ export default function CollectionDetailPage() {
                       reader.readAsDataURL(file);
                     }
                   }}
-                  className="block w-full text-sm text-stone file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-terracotta/10 file:text-terracotta hover:file:bg-terracotta/20"
+                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-terracotta/10 file:text-terracotta hover:file:bg-terracotta/20"
                 />
               </div>
             </div>
@@ -520,29 +520,29 @@ export default function CollectionDetailPage() {
                 placeholder={`${t("common.search")}...`}
                 value={recipeSearch}
                 onChange={(e) => setRecipeSearch(e.target.value)}
-                className="w-full pl-14 pr-4 py-4 bg-white border border-stone-light/30 rounded-[24px] shadow-sm focus:outline-none focus:ring-2 focus:ring-terracotta focus:border-transparent transition-all text-charcoal font-medium placeholder:text-stone-500 text-lg"
+                className="w-full pl-14 pr-4 py-4 bg-white border border-stone-light/30 rounded-[24px] shadow-sm focus:outline-none focus:ring-2 focus:ring-terracotta focus:border-transparent transition-all text-black font-medium placeholder:text-gray-500-500 text-lg"
               />
-              <div className="absolute left-5 top-1/2 -translate-y-1/2 text-stone-500">
+              <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-500-500">
                 <Search className="w-6 h-6" />
               </div>
             </div>
 
             {Array.from(new Set(userRecipes.flatMap(r => r.tags || []))).length > 0 && (
               <div className="flex bg-white rounded-[24px] shadow-sm border border-stone-light/30 overflow-hidden relative sm:flex-shrink-0">
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-stone-500">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500-500">
                    <Utensils className="w-5 h-5" />
                 </div>
                 <select 
                   value={selectedTag}
                   onChange={(e) => setSelectedTag(e.target.value)}
-                  className="appearance-none bg-transparent py-4 pl-11 pr-10 text-lg font-medium text-charcoal focus:outline-none cursor-pointer"
+                  className="appearance-none bg-transparent py-4 pl-11 pr-10 text-lg font-medium text-black focus:outline-none cursor-pointer"
                 >
                   <option value="">{t("collections.all_recipes")}</option>
                   {Array.from(new Set(userRecipes.flatMap(r => r.tags || []))).map(tag => (
                     <option key={tag} value={tag}>{tag}</option>
                   ))}
                 </select>
-                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-stone-400">
+                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500-400">
                    <ChevronDown className="w-5 h-5" />
                 </div>
               </div>
@@ -550,7 +550,7 @@ export default function CollectionDetailPage() {
           </div>
           
           {userRecipes.length === 0 ? (
-            <p className="text-stone-500 py-8 text-center bg-stone/5 rounded-2xl border border-dashed border-stone/20">Vous n'avez aucune recette validée à ajouter.</p>
+            <p className="text-gray-500-500 py-8 text-center bg-stone/5 rounded-2xl border border-dashed border-stone/20">Vous n'avez aucune recette validée à ajouter.</p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[60vh] overflow-y-auto p-1">
               {userRecipes
@@ -576,8 +576,8 @@ export default function CollectionDetailPage() {
                     </div>
                   )}
                   <div className="flex-grow min-w-0">
-                    <p className="font-medium text-charcoal truncate">{recipe.title}</p>
-                    <p className="text-xs text-stone-500 truncate">{recipe.prepTime + recipe.cookTime} min • {recipe.difficulty}</p>
+                    <p className="font-medium text-black truncate">{recipe.title}</p>
+                    <p className="text-xs text-gray-500-500 truncate">{recipe.prepTime + recipe.cookTime} min • {recipe.difficulty}</p>
                   </div>
                 </div>
               ))}

@@ -64,17 +64,17 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-cream flex flex-col items-center justify-center p-4">
-      <Card className="w-full max-w-md p-6 sm:p-8 bg-cream-dark">
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
+      <Card className="w-full max-w-md p-6 sm:p-8 bg-gray-100">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-heading text-terracotta mb-2">Gusto</h1>
-          <p className="text-brown">Votre assistant culinaire personnel</p>
+          <p className="text-gray-500">Votre assistant culinaire personnel</p>
         </div>
 
         <div className="flex mb-6 border-b border-stone/30">
           <button
             className={`flex-1 pb-2 font-medium transition-colors ${
-              isLogin ? "text-terracotta border-b-2 border-terracotta" : "text-stone hover:text-charcoal"
+              isLogin ? "text-terracotta border-b-2 border-terracotta" : "text-gray-500 hover:text-black"
             }`}
             onClick={() => setIsLogin(true)}
           >
@@ -82,7 +82,7 @@ export default function LoginPage() {
           </button>
           <button
             className={`flex-1 pb-2 font-medium transition-colors ${
-              !isLogin ? "text-terracotta border-b-2 border-terracotta" : "text-stone hover:text-charcoal"
+              !isLogin ? "text-terracotta border-b-2 border-terracotta" : "text-gray-500 hover:text-black"
             }`}
             onClick={() => setIsLogin(false)}
           >
@@ -133,13 +133,13 @@ export default function LoginPage() {
 
         <div className="my-6 flex items-center">
           <div className="flex-grow border-t border-stone/30"></div>
-          <span className="px-3 text-sm text-stone">ou</span>
+          <span className="px-3 text-sm text-gray-500">ou</span>
           <div className="flex-grow border-t border-stone/30"></div>
         </div>
 
         <Button
           variant="secondary"
-          className="w-full bg-white hover:bg-gray-50 text-charcoal border-stone/30"
+          className="w-full bg-white hover:bg-gray-50 text-black border-stone/30"
           onClick={handleGoogleSignIn}
           isLoading={isGoogleLoading}
           leftIcon={

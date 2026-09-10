@@ -122,7 +122,7 @@ export default function CollectionsPage() {
   return (
     <div className="page-container py-8 pb-24">
       <div className="flex flex-wrap justify-between items-center mb-12 gap-4">
-        <h1 className="font-heading text-5xl md:text-6xl font-black text-charcoal tracking-tight">
+        <h1 className="font-heading text-5xl md:text-6xl font-black text-black tracking-tight">
           {t("nav.collections")}
         </h1>
         <Button onClick={() => setIsModalOpen(true)}>
@@ -146,7 +146,7 @@ export default function CollectionsPage() {
           <div className="mb-4 bg-terracotta/10 p-4 rounded-full">
             <Library className="w-12 h-12 text-terracotta" />
           </div>
-          <h3 className="text-xl font-medium text-charcoal mb-4">{t("empty_states.no_collections")}</h3>
+          <h3 className="text-xl font-medium text-black mb-4">{t("empty_states.no_collections")}</h3>
           <Button onClick={() => setIsModalOpen(true)}>
             {t("collections.new_collection")}
           </Button>
@@ -172,12 +172,12 @@ export default function CollectionsPage() {
               }
             >
               <div className="flex justify-between items-start mb-3 mt-4">
-                <h3 className="text-xl font-heading font-black text-charcoal line-clamp-1">{coll.name}</h3>
-                <Badge variant="primary" size="sm" className="bg-cream-dark text-stone-600 border-none">
+                <h3 className="text-xl font-heading font-black text-black line-clamp-1">{coll.name}</h3>
+                <Badge variant="primary" size="sm" className="bg-gray-100 text-gray-500-600 border-none">
                   {coll.recipeIds?.length || 0} recettes
                 </Badge>
               </div>
-              <p className="text-stone-500 text-sm line-clamp-2 flex-grow mb-4">
+              <p className="text-gray-500-500 text-sm line-clamp-2 flex-grow mb-4">
                 {coll.description}
               </p>
               
@@ -206,7 +206,7 @@ export default function CollectionsPage() {
       >
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-charcoal mb-1">{t("collections.cover_image")}</label>
+            <label className="block text-sm font-medium text-black mb-1">{t("collections.cover_image")}</label>
             <div className="flex items-center space-x-4">
               <div className="relative w-24 h-24 bg-stone/10 rounded-2xl flex-shrink-0 overflow-hidden flex items-center justify-center border border-dashed border-stone/30">
                 {coverImagePreview ? (
@@ -227,7 +227,7 @@ export default function CollectionsPage() {
                     </button>
                   </>
                 ) : (
-                  <Upload className="w-6 h-6 text-stone/50" />
+                  <Upload className="w-6 h-6 text-gray-500/50" />
                 )}
               </div>
               <div className="flex-grow">
@@ -245,7 +245,7 @@ export default function CollectionsPage() {
                       reader.readAsDataURL(file);
                     }
                   }}
-                  className="block w-full text-sm text-stone file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-terracotta/10 file:text-terracotta hover:file:bg-terracotta/20"
+                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-terracotta/10 file:text-terracotta hover:file:bg-terracotta/20"
                 />
               </div>
             </div>

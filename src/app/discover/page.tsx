@@ -186,18 +186,18 @@ export default function DiscoverPage() {
   return (
     <div className="page-container py-8 pb-24">
       <div className="mb-12">
-        <h1 className="font-heading text-5xl md:text-6xl font-black text-charcoal mb-8 tracking-tight">Découvrir</h1>
+        <h1 className="font-heading text-5xl md:text-6xl font-black text-black mb-8 tracking-tight">Découvrir</h1>
         
         {/* Search Bar */}
         <div className="max-w-2xl w-full mb-8 relative">
           <input 
             type="text" 
             placeholder="Rechercher une recette, un ingrédient..."
-            className="w-full pl-14 pr-4 py-4 bg-white border border-stone-light/30 rounded-[24px] shadow-sm focus:outline-none focus:ring-2 focus:ring-terracotta focus:border-transparent transition-all text-charcoal font-medium placeholder:text-stone-500 text-lg"
+            className="w-full pl-14 pr-4 py-4 bg-white border border-black/5 rounded-[24px] shadow-sm focus:outline-none focus:ring-2 focus:ring-terracotta focus:border-transparent transition-all text-black font-medium placeholder:text-gray-500 text-lg"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-          <div className="absolute left-5 top-1/2 -translate-y-1/2 text-stone-500">
+          <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-500">
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
@@ -205,62 +205,62 @@ export default function DiscoverPage() {
         </div>
 
         {/* Modern Filter System */}
-        <div className="flex flex-wrap gap-4 items-center p-4 bg-cream-dark rounded-[24px] border border-stone-light/30 shadow-sm">
-          <div className="flex items-center gap-2 text-stone-500 font-medium mr-2">
+        <div className="flex flex-wrap gap-4 items-center p-4 bg-gray-50 rounded-[24px] border border-black/5 shadow-sm">
+          <div className="flex items-center gap-2 text-gray-500 font-medium mr-2">
             <Filter className="w-5 h-5" />
             <span className="hidden sm:inline">Filtres:</span>
           </div>
 
-          <div className="flex bg-white rounded-xl shadow-sm border border-stone-light/30 overflow-hidden relative">
-            <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-stone-500">
+          <div className="flex bg-white rounded-xl shadow-sm border border-black/5 overflow-hidden relative">
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
                <Utensils className="w-4 h-4" />
             </div>
             <select 
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value)}
-              className="appearance-none bg-transparent py-2.5 pl-9 pr-8 text-sm font-semibold text-charcoal focus:outline-none cursor-pointer"
+              className="appearance-none bg-transparent py-2.5 pl-9 pr-8 text-sm font-semibold text-black focus:outline-none cursor-pointer"
             >
               {DISH_TYPES.map(t => (
                 <option key={t.id} value={t.id}>{t.label}</option>
               ))}
             </select>
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-stone-400">
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500-400">
                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
             </div>
           </div>
 
-          <div className="flex bg-white rounded-xl shadow-sm border border-stone-light/30 overflow-hidden relative">
+          <div className="flex bg-white rounded-xl shadow-sm border border-black/5 overflow-hidden relative">
             <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-terracotta">
                <Flame className="w-4 h-4" />
             </div>
             <select 
               value={difficultyFilter}
               onChange={(e) => setDifficultyFilter(e.target.value)}
-              className="appearance-none bg-transparent py-2.5 pl-9 pr-8 text-sm font-semibold text-charcoal focus:outline-none cursor-pointer"
+              className="appearance-none bg-transparent py-2.5 pl-9 pr-8 text-sm font-semibold text-black focus:outline-none cursor-pointer"
             >
               {DIFFICULTIES.map(d => (
                 <option key={d.id} value={d.id}>{d.label}</option>
               ))}
             </select>
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-stone-400">
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500-400">
                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
             </div>
           </div>
 
-          <div className="flex bg-white rounded-xl shadow-sm border border-stone-light/30 overflow-hidden relative">
-             <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-stone-500">
+          <div className="flex bg-white rounded-xl shadow-sm border border-black/5 overflow-hidden relative">
+             <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
                <Clock className="w-4 h-4" />
             </div>
             <select 
               value={timeFilter}
               onChange={(e) => setTimeFilter(e.target.value)}
-              className="appearance-none bg-transparent py-2.5 pl-9 pr-8 text-sm font-semibold text-charcoal focus:outline-none cursor-pointer"
+              className="appearance-none bg-transparent py-2.5 pl-9 pr-8 text-sm font-semibold text-black focus:outline-none cursor-pointer"
             >
               {TIMES.map(t => (
                 <option key={t.id} value={t.id}>{t.label}</option>
               ))}
             </select>
-             <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-stone-400">
+             <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500-400">
                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
             </div>
           </div>
@@ -289,7 +289,7 @@ export default function DiscoverPage() {
         isFiltering ? (
           /* Search Results View */
           <div>
-            <h2 className="text-2xl font-heading font-black text-charcoal mb-6">Résultats de la recherche ({filteredRecipes.length})</h2>
+            <h2 className="text-2xl font-heading font-black text-black mb-6">Résultats de la recherche ({filteredRecipes.length})</h2>
             {renderRecipeGrid(filteredRecipes)}
           </div>
         ) : (
@@ -302,7 +302,7 @@ export default function DiscoverPage() {
                   <div className="w-10 h-10 rounded-full bg-terracotta/10 flex items-center justify-center text-terracotta">
                     <TrendingUp className="w-5 h-5" />
                   </div>
-                  <h2 className="text-3xl font-heading font-black text-charcoal tracking-tight">Tendances</h2>
+                  <h2 className="text-3xl font-heading font-black text-black tracking-tight">Tendances</h2>
                 </div>
                 {renderRecipeGrid(trendingRecipes)}
               </section>
@@ -314,7 +314,7 @@ export default function DiscoverPage() {
                    <div className="w-10 h-10 rounded-full bg-yellow-500/10 flex items-center justify-center text-yellow-600">
                     <Star className="w-5 h-5 fill-yellow-600" />
                   </div>
-                  <h2 className="text-3xl font-heading font-black text-charcoal tracking-tight">Coups de cœur de la communauté</h2>
+                  <h2 className="text-3xl font-heading font-black text-black tracking-tight">Coups de cœur de la communauté</h2>
                 </div>
                 {renderRecipeGrid(favoriteRecipes)}
               </section>
@@ -322,7 +322,7 @@ export default function DiscoverPage() {
 
             {otherRecipes.length > 0 && (
               <section>
-                <h2 className="text-3xl font-heading font-black text-charcoal tracking-tight mb-6">Toutes les recettes</h2>
+                <h2 className="text-3xl font-heading font-black text-black tracking-tight mb-6">Toutes les recettes</h2>
                 {renderRecipeGrid(otherRecipes)}
               </section>
             )}
@@ -330,10 +330,10 @@ export default function DiscoverPage() {
           </div>
         )
       ) : (
-        <div className="text-center py-20 bg-white rounded-[32px] border border-stone-light/30 shadow-sm">
+        <div className="text-center py-20 bg-white rounded-[32px] border border-black/5 shadow-sm">
           <div className="text-5xl mb-4">🍽️</div>
-          <h3 className="text-xl font-medium text-charcoal mb-2">Aucune recette trouvée</h3>
-          <p className="text-brown">Essayez de modifier vos filtres ou votre recherche.</p>
+          <h3 className="text-xl font-medium text-black mb-2">Aucune recette trouvée</h3>
+          <p className="text-gray-500">Essayez de modifier vos filtres ou votre recherche.</p>
         </div>
       )}
     </div>

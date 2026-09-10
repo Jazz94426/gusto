@@ -143,7 +143,7 @@ export default function RecipesPage() {
   return (
     <div className="page-container py-8 pb-24">
       <div className="flex flex-wrap justify-between items-center mb-12 gap-4">
-        <h1 className="font-heading text-5xl md:text-6xl font-black text-charcoal tracking-tight">{t("nav.my_recipes")}</h1>
+        <h1 className="font-heading text-5xl md:text-6xl font-black text-black tracking-tight">{t("nav.my_recipes")}</h1>
         <Button onClick={() => router.push("/import")}>{t("common.add")}</Button>
       </div>
 
@@ -159,7 +159,7 @@ export default function RecipesPage() {
         <>
 
       {drafts.length > 0 && (
-        <section className="mb-12 bg-cream-dark rounded-[32px] p-6 md:p-8 border-2 border-dashed border-terracotta/30">
+        <section className="mb-12 bg-gray-50 rounded-[32px] p-6 md:p-8 border-2 border-dashed border-terracotta/30">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl md:text-3xl font-heading font-black text-terracotta">Brouillons en attente</h2>
             <Link href="/recipes/drafts" className="text-terracotta text-sm hover:underline font-bold">
@@ -168,10 +168,10 @@ export default function RecipesPage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {drafts.slice(0, 4).map(draft => (
-              <Card key={draft.id} className="bg-white shadow-sm border border-stone-light/30 flex flex-col rounded-[24px] p-5">
+              <Card key={draft.id} className="bg-white shadow-sm border border-black/5 flex flex-col rounded-[24px] p-5">
                 <div className="flex justify-between items-start mb-2">
-                  <h3 className="font-heading font-black text-charcoal text-xl line-clamp-1" title={draft.title}>{draft.title || "Nouvelle recette"}</h3>
-                  <span className="text-xs font-bold bg-cream-dark text-stone-500 px-3 py-1.5 rounded-full uppercase tracking-wider">{draft.sourceType}</span>
+                  <h3 className="font-heading font-black text-black text-xl line-clamp-1" title={draft.title}>{draft.title || "Nouvelle recette"}</h3>
+                  <span className="text-xs font-bold bg-gray-50 text-gray-500 px-3 py-1.5 rounded-full uppercase tracking-wider">{draft.sourceType}</span>
                 </div>
                 <div className="mt-auto pt-4 flex gap-2">
                   <Button size="sm" variant="primary" className="flex-1 bg-terracotta hover:bg-terracotta-dark text-white rounded-full" onClick={() => router.push(`/import?edit=${draft.id}`)}>
@@ -195,89 +195,89 @@ export default function RecipesPage() {
               placeholder={`${t("common.search")}...`}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-14 pr-4 py-4 bg-white border border-stone-light/30 rounded-[24px] shadow-sm focus:outline-none focus:ring-2 focus:ring-terracotta focus:border-transparent transition-all text-charcoal font-medium placeholder:text-stone-500 text-lg"
+              className="w-full pl-14 pr-4 py-4 bg-white border border-black/5 rounded-[24px] shadow-sm focus:outline-none focus:ring-2 focus:ring-terracotta focus:border-transparent transition-all text-black font-medium placeholder:text-gray-500 text-lg"
             />
-            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-stone-500">
+            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-500">
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </div>
           </div>
           
-          <div className="flex flex-wrap gap-4 items-center p-4 bg-cream-dark rounded-[24px] border border-stone-light/30 shadow-sm">
-            <div className="flex items-center gap-2 text-stone-500 font-medium mr-2">
+          <div className="flex flex-wrap gap-4 items-center p-4 bg-gray-50 rounded-[24px] border border-black/5 shadow-sm">
+            <div className="flex items-center gap-2 text-gray-500 font-medium mr-2">
               <Filter className="w-5 h-5" />
               <span className="hidden sm:inline">Filtres:</span>
             </div>
 
-            <div className="flex bg-white rounded-xl shadow-sm border border-stone-light/30 overflow-hidden relative">
-              <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-stone-500">
+            <div className="flex bg-white rounded-xl shadow-sm border border-black/5 overflow-hidden relative">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
                  <Utensils className="w-4 h-4" />
               </div>
               <select 
                 value={typeFilter}
                 onChange={(e) => setTypeFilter(e.target.value)}
-                className="appearance-none bg-transparent py-2.5 pl-9 pr-8 text-sm font-semibold text-charcoal focus:outline-none cursor-pointer"
+                className="appearance-none bg-transparent py-2.5 pl-9 pr-8 text-sm font-semibold text-black focus:outline-none cursor-pointer"
               >
                 {DISH_TYPES.map(t => (
                   <option key={t.id} value={t.id}>{t.label}</option>
                 ))}
               </select>
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-stone-400">
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500-400">
                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
               </div>
             </div>
 
-            <div className="flex bg-white rounded-xl shadow-sm border border-stone-light/30 overflow-hidden relative">
+            <div className="flex bg-white rounded-xl shadow-sm border border-black/5 overflow-hidden relative">
               <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-terracotta">
                  <Flame className="w-4 h-4" />
               </div>
               <select 
                 value={difficultyFilter}
                 onChange={(e) => setDifficultyFilter(e.target.value)}
-                className="appearance-none bg-transparent py-2.5 pl-9 pr-8 text-sm font-semibold text-charcoal focus:outline-none cursor-pointer"
+                className="appearance-none bg-transparent py-2.5 pl-9 pr-8 text-sm font-semibold text-black focus:outline-none cursor-pointer"
               >
                 {DIFFICULTIES.map(d => (
                   <option key={d.id} value={d.id}>{d.label}</option>
                 ))}
               </select>
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-stone-400">
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500-400">
                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
               </div>
             </div>
 
-            <div className="flex bg-white rounded-xl shadow-sm border border-stone-light/30 overflow-hidden relative">
-               <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-stone-500">
+            <div className="flex bg-white rounded-xl shadow-sm border border-black/5 overflow-hidden relative">
+               <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
                  <Clock className="w-4 h-4" />
               </div>
               <select 
                 value={timeFilter}
                 onChange={(e) => setTimeFilter(e.target.value)}
-                className="appearance-none bg-transparent py-2.5 pl-9 pr-8 text-sm font-semibold text-charcoal focus:outline-none cursor-pointer"
+                className="appearance-none bg-transparent py-2.5 pl-9 pr-8 text-sm font-semibold text-black focus:outline-none cursor-pointer"
               >
                 {TIMES.map(t => (
                   <option key={t.id} value={t.id}>{t.label}</option>
                 ))}
               </select>
-               <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-stone-400">
+               <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500-400">
                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
               </div>
             </div>
             
-            <div className="flex bg-white rounded-xl shadow-sm border border-stone-light/30 overflow-hidden relative">
-               <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-stone-500">
+            <div className="flex bg-white rounded-xl shadow-sm border border-black/5 overflow-hidden relative">
+               <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
                  <Eye className="w-4 h-4" />
               </div>
               <select 
                 value={visibilityFilter}
                 onChange={(e) => setVisibilityFilter(e.target.value)}
-                className="appearance-none bg-transparent py-2.5 pl-9 pr-8 text-sm font-semibold text-charcoal focus:outline-none cursor-pointer"
+                className="appearance-none bg-transparent py-2.5 pl-9 pr-8 text-sm font-semibold text-black focus:outline-none cursor-pointer"
               >
                 {VISIBILITIES.map(v => (
                   <option key={v.id} value={v.id}>{v.label}</option>
                 ))}
               </select>
-               <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-stone-400">
+               <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500-400">
                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
               </div>
             </div>
@@ -294,12 +294,12 @@ export default function RecipesPage() {
         </div>
 
         {filteredRecipes.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-[32px] border border-stone-light/30 shadow-sm flex flex-col items-center">
+          <div className="text-center py-20 bg-white rounded-[32px] border border-black/5 shadow-sm flex flex-col items-center">
             <div className="mb-4 bg-terracotta/10 p-4 rounded-full">
               <Utensils className="w-12 h-12 text-terracotta" />
             </div>
-            <h3 className="text-xl font-medium text-charcoal mb-2">{t("empty_states.no_recipes")}</h3>
-            <p className="text-brown">Essayez de modifier vos filtres ou créez une nouvelle recette.</p>
+            <h3 className="text-xl font-medium text-black mb-2">{t("empty_states.no_recipes")}</h3>
+            <p className="text-gray-500">Essayez de modifier vos filtres ou créez une nouvelle recette.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

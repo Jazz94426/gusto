@@ -69,7 +69,7 @@ function ImportContent() {
 
   return (
     <div className="container mx-auto p-4 max-w-6xl">
-      <h1 className="text-3xl font-serif text-charcoal mb-6">{t('common.import')}</h1>
+      <h1 className="text-3xl font-serif text-black mb-6">{t('common.import')}</h1>
       
       <div className="flex space-x-2 mb-6 border-b border-stone pb-2">
         <Button
@@ -92,7 +92,7 @@ function ImportContent() {
         </Button>
       </div>
 
-      <div className="bg-cream-dark p-6 rounded-2xl shadow-sm">
+      <div className="bg-gray-100 p-6 rounded-2xl shadow-sm">
         {activeTab === "manual" && <ManualEntryForm initialData={extractedData} />}
         {activeTab === "url" && <URLImportForm onSuccess={handleExtractionSuccess} />}
         {activeTab === "image" && <ImageMaskingTool onSuccess={handleExtractionSuccess} />}

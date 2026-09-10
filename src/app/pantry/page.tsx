@@ -25,7 +25,7 @@ export default function PantryPage() {
 
   return (
     <div className="page-container py-8 pb-24">
-      <h1 className="font-heading text-5xl md:text-6xl font-black text-charcoal tracking-tight mb-8">
+      <h1 className="font-heading text-5xl md:text-6xl font-black text-black tracking-tight mb-8">
         {t("nav.pantry")}
       </h1>
       
@@ -35,8 +35,8 @@ export default function PantryPage() {
           onClick={() => setActiveTab('pantry')}
           className={`flex-1 py-3 px-4 rounded-[12px] font-medium transition-all text-sm ${
             activeTab === 'pantry' 
-              ? 'bg-white text-charcoal shadow-sm' 
-              : 'text-stone-500 hover:text-charcoal'
+              ? 'bg-white text-black shadow-sm' 
+              : 'text-gray-500-500 hover:text-black'
           }`}
         >
           {t("pantry.pantry")}
@@ -45,8 +45,8 @@ export default function PantryPage() {
           onClick={() => setActiveTab('shopping')}
           className={`flex-1 py-3 px-4 rounded-[12px] font-medium transition-all text-sm ${
             activeTab === 'shopping' 
-              ? 'bg-white text-charcoal shadow-sm' 
-              : 'text-stone-500 hover:text-charcoal'
+              ? 'bg-white text-black shadow-sm' 
+              : 'text-gray-500-500 hover:text-black'
           }`}
         >
           {t("pantry.shopping_list")}

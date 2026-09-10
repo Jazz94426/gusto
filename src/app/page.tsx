@@ -18,7 +18,7 @@ export default function Home() {
   };
 
   return (
-    <div className="relative min-h-[calc(100vh-72px)] overflow-hidden bg-cream flex flex-col">
+    <div className="relative min-h-[calc(100vh-72px)] overflow-hidden bg-gray-50 flex flex-col">
       {/* Hero Section */}
       <section className="relative min-h-[calc(100vh-72px)] flex items-center justify-center pt-12 pb-24 lg:pt-0">
         {/* Background concentric circles */}
@@ -52,7 +52,7 @@ export default function Home() {
               <span className="text-terracotta">
                 <ChefHat className="w-4 h-4" />
               </span>
-              <p className="text-sm font-medium text-stone">
+              <p className="text-sm font-medium text-gray-500">
                 <span className="text-terracotta font-semibold">{t('home.badge_highlight')}</span> {t('home.badge_text')}
               </p>
             </motion.div>
@@ -61,7 +61,7 @@ export default function Home() {
               {t('home.title')}
             </motion.h1>
             
-            <motion.p variants={fadeInUp} className="text-lg text-brown mb-10 max-w-lg leading-relaxed">
+            <motion.p variants={fadeInUp} className="text-lg text-gray-500 mb-10 max-w-lg leading-relaxed">
               {t('home.subtitle')}
             </motion.p>
 
@@ -74,7 +74,7 @@ export default function Home() {
               </Link>
               <Link 
                 href="/login"
-                className="px-8 py-3.5 bg-white text-neutral-800 rounded-full font-semibold hover:bg-cream-dark transition-colors shadow-sm border border-stone-light/40"
+                className="px-8 py-3.5 bg-white text-neutral-800 rounded-full font-semibold hover:bg-gray-50-dark transition-colors shadow-sm border border-stone-light/40"
               >
                 Créer un compte
               </Link>
@@ -100,15 +100,15 @@ export default function Home() {
                     <span className="font-medium text-sm text-neutral-800">{t('home.phone_user')}</span>
                   </div>
                   <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm">
-                    <Bell className="w-4 h-4 text-stone" />
+                    <Bell className="w-4 h-4 text-gray-500" />
                   </div>
                 </div>
 
                 <h2 className="text-2xl font-heading text-neutral-800 mb-4">{t('home.phone_title')}</h2>
                 
                 <div className="bg-white px-4 py-3 rounded-xl flex items-center gap-2 mb-6 shadow-sm">
-                  <Search className="w-4 h-4 text-stone-light" />
-                  <span className="text-stone-light text-sm">{t('home.phone_search')}</span>
+                  <Search className="w-4 h-4 text-gray-500-light" />
+                  <span className="text-gray-500-light text-sm">{t('home.phone_search')}</span>
                 </div>
 
                 {/* Grid categories */}
@@ -116,7 +116,7 @@ export default function Home() {
                   {[
                     { name: t('home.cat_breakfast'), icon: Coffee, color: 'text-amber-600' },
                     { name: t('home.cat_lunch'), icon: Utensils, color: 'text-orange-500' },
-                    { name: t('home.cat_dinner'), icon: ChefHat, color: 'text-stone-600' },
+                    { name: t('home.cat_dinner'), icon: ChefHat, color: 'text-gray-500-600' },
                     { name: t('home.cat_snack'), icon: Apple, color: 'text-red-500' },
                     { name: t('home.cat_salad'), icon: Carrot, color: 'text-orange-400' },
                     { name: t('home.cat_drink'), icon: CupSoda, color: 'text-green-500' },
@@ -129,7 +129,7 @@ export default function Home() {
                         <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-sm ${i === 7 ? 'bg-[#98D8D0]' : 'bg-white'}`}>
                           <Icon className={`w-5 h-5 ${cat.color}`} />
                         </div>
-                        <span className="text-[10px] text-stone font-medium">{cat.name}</span>
+                        <span className="text-[10px] text-gray-500 font-medium">{cat.name}</span>
                       </div>
                     );
                   })}
@@ -150,12 +150,12 @@ export default function Home() {
                 {/* Bottom Nav Mockup */}
                 <div className="absolute bottom-6 left-6 right-6 h-14 bg-neutral-800 rounded-full flex items-center justify-around px-4 shadow-lg">
                   <div className="w-10 h-10 bg-[#D4F554] rounded-full flex items-center justify-center">
-                    <HomeIcon className="w-5 h-5 text-charcoal" />
+                    <HomeIcon className="w-5 h-5 text-black" />
                   </div>
-                  <Heart className="w-5 h-5 text-stone-light" />
-                  <PlusSquare className="w-5 h-5 text-stone-light" />
-                  <LayoutGrid className="w-5 h-5 text-stone-light" />
-                  <User className="w-5 h-5 text-stone-light" />
+                  <Heart className="w-5 h-5 text-gray-500-light" />
+                  <PlusSquare className="w-5 h-5 text-gray-500-light" />
+                  <LayoutGrid className="w-5 h-5 text-gray-500-light" />
+                  <User className="w-5 h-5 text-gray-500-light" />
                 </div>
               </div>
             </div>
@@ -166,7 +166,7 @@ export default function Home() {
                 <img src="https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=100&q=80" alt="Recipe" className="w-12 h-12 rounded-xl object-cover" />
                 <div>
                   <p className="font-medium text-sm text-neutral-800">Sausage egg</p>
-                  <div className="flex items-center gap-1 text-xs text-stone mt-0.5">
+                  <div className="flex items-center gap-1 text-xs text-gray-500 mt-0.5">
                     <Clock className="w-3 h-3" />
                     <span>8 mins</span>
                     <Star className="w-3 h-3 text-yellow-500 ml-1 fill-yellow-500" />
@@ -181,14 +181,14 @@ export default function Home() {
                 <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=100&q=80" alt="Recipe" className="w-12 h-12 rounded-xl object-cover" />
                 <div>
                   <p className="font-medium text-sm text-neutral-800">Mix vegetables</p>
-                  <div className="flex items-center gap-1 text-xs text-stone mt-0.5">
+                  <div className="flex items-center gap-1 text-xs text-gray-500 mt-0.5">
                     <Clock className="w-3 h-3" />
                     <span>3 mins</span>
                     <Star className="w-3 h-3 text-yellow-500 ml-1 fill-yellow-500" />
                     <span>4.5</span>
                   </div>
                 </div>
-                <div className="ml-2 w-6 h-6 flex items-center justify-center text-stone">
+                <div className="ml-2 w-6 h-6 flex items-center justify-center text-gray-500">
                   <ChevronRight className="w-4 h-4" />
                 </div>
               </div>
@@ -197,20 +197,20 @@ export default function Home() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.4 }} className="absolute bottom-24 left-4 lg:-left-8 z-20 animate-float-delayed">
               <div className="bg-[#D4F554] p-4 rounded-3xl shadow-xl w-32 border border-[#bce038]">
                 <div className="mb-2">
-                  <Clock className="w-5 h-5 text-charcoal" />
+                  <Clock className="w-5 h-5 text-black" />
                 </div>
-                <p className="text-xs text-charcoal/70 font-medium mb-1">Cooking time</p>
-                <p className="text-2xl font-semibold text-charcoal">30 <span className="text-base font-normal">mins</span></p>
+                <p className="text-xs text-black/70 font-medium mb-1">Cooking time</p>
+                <p className="text-2xl font-semibold text-black">30 <span className="text-base font-normal">mins</span></p>
               </div>
             </motion.div>
 
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 1.6 }} className="absolute top-24 right-0 lg:-right-12 z-20 animate-float">
               <div className="bg-[#FBCBAE] p-4 rounded-3xl shadow-xl w-32 border border-[#f0b491]">
                 <div className="mb-2">
-                  <Utensils className="w-5 h-5 text-charcoal" />
+                  <Utensils className="w-5 h-5 text-black" />
                 </div>
-                <p className="text-xs text-charcoal/70 font-medium mb-1">Servings</p>
-                <p className="text-2xl font-semibold text-charcoal">4 <span className="text-base font-normal">peoples</span></p>
+                <p className="text-xs text-black/70 font-medium mb-1">Servings</p>
+                <p className="text-2xl font-semibold text-black">4 <span className="text-base font-normal">peoples</span></p>
               </div>
             </motion.div>
 
@@ -236,8 +236,8 @@ export default function Home() {
                   <ScanLine className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="font-semibold text-charcoal">{t('home.feature1_img_badge1')}</p>
-                  <p className="text-sm text-stone">{t('home.feature1_img_badge2')}</p>
+                  <p className="font-semibold text-black">{t('home.feature1_img_badge1')}</p>
+                  <p className="text-sm text-gray-500">{t('home.feature1_img_badge2')}</p>
                 </div>
               </div>
             </div>
@@ -250,16 +250,16 @@ export default function Home() {
             transition={{ duration: 0.6 }}
             className="order-1 lg:order-2 bg-white p-10 lg:p-12 rounded-[40px] shadow-xl border border-stone-light/20"
           >
-            <div className="w-16 h-16 bg-cream rounded-2xl flex items-center justify-center mb-6">
+            <div className="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center mb-6">
               <ScanLine className="w-8 h-8 text-terracotta" />
             </div>
             <h2 className="text-4xl lg:text-5xl font-heading text-neutral-800 leading-[1.1] mb-6">{t('home.feature1_title')}</h2>
-            <p className="text-lg text-brown mb-8 leading-relaxed">
+            <p className="text-lg text-gray-500 mb-8 leading-relaxed">
               {t('home.feature1_desc')}
             </p>
             <ul className="space-y-4">
               {[t('home.feature1_list1'), t('home.feature1_list2'), t('home.feature1_list3')].map((item, i) => (
-                <li key={i} className="flex items-center gap-3 text-stone-dark font-medium">
+                <li key={i} className="flex items-center gap-3 text-gray-800 font-medium">
                   <div className="w-6 h-6 rounded-full bg-terracotta/20 flex items-center justify-center text-terracotta">
                     <ChevronRight className="w-4 h-4" />
                   </div>
@@ -272,7 +272,7 @@ export default function Home() {
       </section>
 
       {/* Feature Section 2 */}
-      <section className="py-24 bg-cream">
+      <section className="py-24 bg-gray-50">
         <div className="page-container grid lg:grid-cols-2 gap-16 items-center">
           <motion.div 
             initial={{ opacity: 0, x: -50 }}
@@ -285,7 +285,7 @@ export default function Home() {
               <CalendarDays className="w-8 h-8 text-terracotta" />
             </div>
             <h2 className="text-4xl lg:text-5xl font-heading text-neutral-800 leading-[1.1] mb-6">{t('home.feature2_title')}</h2>
-            <p className="text-lg text-brown mb-8 leading-relaxed">
+            <p className="text-lg text-gray-500 mb-8 leading-relaxed">
               {t('home.feature2_desc')}
             </p>
             <Link href="/login" className="inline-flex items-center gap-2 text-terracotta font-semibold hover:gap-3 transition-all">
@@ -303,8 +303,8 @@ export default function Home() {
             <img src="https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=800&q=80" alt="Meal planning" className="w-full h-full object-cover" />
             <div className="absolute top-8 right-8">
               <div className="bg-white/95 backdrop-blur-sm p-4 rounded-2xl shadow-xl w-48 rotate-3">
-                <p className="text-xs font-semibold text-stone uppercase tracking-wider mb-2">{t('home.feature2_img_badge1')}</p>
-                <div className="bg-cream p-2 rounded-lg flex items-center gap-2">
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{t('home.feature2_img_badge1')}</p>
+                <div className="bg-gray-50 p-2 rounded-lg flex items-center gap-2">
                   <Utensils className="w-4 h-4 text-terracotta" />
                   <span className="text-sm font-medium">{t('home.feature2_img_badge2')}</span>
                 </div>
@@ -332,11 +332,11 @@ export default function Home() {
                   <div className="w-6 h-6 rounded-md bg-terracotta/20 flex items-center justify-center">
                     <div className="w-3 h-3 rounded-sm bg-terracotta"></div>
                   </div>
-                  <span className="font-medium text-charcoal line-through opacity-60">{t('home.feature3_img_badge1')}</span>
+                  <span className="font-medium text-black line-through opacity-60">{t('home.feature3_img_badge1')}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-6 h-6 rounded-md border-2 border-stone-light flex items-center justify-center"></div>
-                  <span className="font-medium text-charcoal">{t('home.feature3_img_badge2')}</span>
+                  <span className="font-medium text-black">{t('home.feature3_img_badge2')}</span>
                 </div>
               </div>
             </div>
@@ -349,11 +349,11 @@ export default function Home() {
             transition={{ duration: 0.6 }}
             className="order-1 lg:order-2 bg-white p-10 lg:p-12 rounded-[40px] shadow-xl border border-stone-light/20"
           >
-            <div className="w-16 h-16 bg-cream rounded-2xl flex items-center justify-center mb-6">
+            <div className="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center mb-6">
               <ShoppingBag className="w-8 h-8 text-terracotta" />
             </div>
             <h2 className="text-4xl lg:text-5xl font-heading text-neutral-800 leading-[1.1] mb-6">{t('home.feature3_title')}</h2>
-            <p className="text-lg text-brown mb-8 leading-relaxed">
+            <p className="text-lg text-gray-500 mb-8 leading-relaxed">
               {t('home.feature3_desc')}
             </p>
             <Link href="/login" className="inline-flex items-center gap-2 text-terracotta font-semibold hover:gap-3 transition-all">

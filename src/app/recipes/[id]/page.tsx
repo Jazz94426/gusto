@@ -12,6 +12,8 @@ import { Heart, Share2, Clock, Users, ArrowLeft, MoreVertical, Edit2, Trash2, Pr
 import { estimateMacros } from '@/lib/macroEstimator';
 import { useRouter } from 'next/navigation';
 import { PREDEFINED_UTENSILS } from '@/constants/utensils';
+import { PageTransition } from '@/components/ui/PageTransition';
+import RecipeTimer from '@/components/ui/RecipeTimer';
 
 export default function RecipeDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = React.use(params);
@@ -378,6 +380,55 @@ export default function RecipeDetailPage({ params }: { params: Promise<{ id: str
               const prevSection = prevStep ? (typeof prevStep === "string" ? undefined : prevStep.section) : null;
               const showSection = section && section !== prevSection;
               
+              const extractTimers = (str: string) => {
+                const regex = /(\d+)\s*(min|h|sec)(?:ute)?(?:eure)?s?(?:\s*(\d+))?/gi;
+                const timers: number[] = [];
+                let match;
+                while ((match = regex.exec(str)) !== null) {
+                  const val1 = parseInt(match[1], 10);
+                  const unit = match[2].toLowerCase();
+                  const val2 = match[3] ? parseInt(match[3], 10) : 0;
+                  if (unit === 'h') {
+                    timers.push(val1 * 60 + val2);
+                  } else if (unit.startsWith('min')) {
+                    timers.push(val1);
+                  } else if (unit.startsWith('sec')) {
+                    timers.push(val1 / 60); 
+                  }
+                }
+                return timers;
+              };
+              const stepTimers = extractTimers(text);
+              
+              const escapeRegExp = (string: string) => string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+              const stopWords = ['et', 'ou', 'de', 'du', 'des', 'la', 'le', 'les', 'un', 'une', 'en', 'au', 'aux', 'pour', 'avec', 'noir', 'blanc'];
+              
+              // 1. Prioritize explicit ingredients array from AI extraction
+              let stepIngredients = isString ? [] : (step.ingredients || []);
+              
+              // 2. Fallback to regex text matching for older recipes
+              if (stepIngredients.length === 0 && displayRecipe.ingredients) {
+                stepIngredients = displayRecipe.ingredients.filter(ing => {
+                  if (!ing.name) return false;
+                  
+                  const exactRegex = new RegExp('(^|[^\\p{L}])' + escapeRegExp(ing.name) + '([^\\p{L}]|$)', 'iu');
+                  if (exactRegex.test(text)) return true;
+                  
+                  const words = ing.name.toLowerCase().replace(/[^\p{L}0-9]/gu, ' ').split(/\s+/).filter(w => w.length > 2 && !stopWords.includes(w));
+                  
+                  if (words.length >= 1) {
+                    let matchCount = 0;
+                    for (const w of words) {
+                      const wRegex = new RegExp('(^|[^\\p{L}])' + escapeRegExp(w) + '([^\\p{L}]|$)', 'iu');
+                      if (wRegex.test(text)) matchCount++;
+                    }
+                    if (words.length === 1 && matchCount === 1) return true;
+                    if (words.length > 1 && matchCount >= Math.ceil(words.length / 2)) return true;
+                  }
+                  return false;
+                });
+              }
+
               return (
                 <React.Fragment key={i}>
                   {showSection && (
@@ -391,8 +442,32 @@ export default function RecipeDetailPage({ params }: { params: Promise<{ id: str
                         {i + 1}
                       </div>
                     </div>
-                    <div className="pt-1.5">
+                    <div className="pt-1.5 flex-1">
                       <p className="text-charcoal leading-relaxed text-lg">{text}</p>
+                      
+                      {(stepTimers.length > 0 || stepIngredients.length > 0) && (
+                        <div className="flex flex-wrap gap-2 mt-3">
+                          {stepTimers.map((duration, idx) => (
+                            <RecipeTimer key={`timer-${idx}`} durationMinutes={duration} label={`Étape ${i + 1}`} />
+                          ))}
+                          
+                          {stepIngredients.map((ing, idx) => {
+                            const qty = ing.quantity ? Math.round((ing.quantity * currentServings / Math.max(1, displayRecipe.servings || 1)) * 10) / 10 : '';
+                            const showAmount = qty || ing.unit;
+                            
+                            return (
+                              <Badge key={`ing-${idx}`} variant="outline" className="bg-cream-dark border-stone-light/30 px-3 py-1.5 rounded-xl shadow-sm text-sm">
+                                {showAmount ? (
+                                  <span className="font-semibold text-terracotta mr-1.5">
+                                    {qty} {ing.unit}
+                                  </span>
+                                ) : null}
+                                <span className="text-charcoal font-medium">{ing.name}</span>
+                              </Badge>
+                            );
+                          })}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </React.Fragment>

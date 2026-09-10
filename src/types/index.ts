@@ -16,9 +16,16 @@ export interface Ingredient {
   section?: string;
 }
 
+export interface StepIngredient {
+  name: string;
+  quantity: number | null;
+  unit: string;
+}
+
 export interface Instruction {
   text: string;
   section?: string;
+  ingredients?: StepIngredient[];
 }
 
 export interface Recipe {

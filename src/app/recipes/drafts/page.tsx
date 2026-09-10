@@ -82,15 +82,15 @@ export default function DraftsPage() {
   return (
     <div className="container mx-auto px-4 py-8 pb-24 max-w-4xl">
       <div className="mb-8">
-        <Link href="/recipes" className="text-sm text-stone hover:text-charcoal mb-4 inline-block">
+        <Link href="/recipes" className="text-sm text-gray-500 hover:text-black mb-4 inline-block">
           &larr; Retour à mes recettes
         </Link>
-        <h1 className="text-3xl font-heading text-charcoal">Tous mes brouillons</h1>
+        <h1 className="text-3xl font-heading text-black">Tous mes brouillons</h1>
       </div>
 
       {drafts.length === 0 ? (
-        <div className="text-center py-16 bg-cream-dark rounded-2xl">
-          <p className="text-brown mb-4">Aucun brouillon. Importez une recette pour commencer !</p>
+        <div className="text-center py-16 bg-gray-100 rounded-2xl">
+          <p className="text-gray-500 mb-4">Aucun brouillon. Importez une recette pour commencer !</p>
           <Button onClick={() => router.push("/import")}>{t("common.import")}</Button>
         </div>
       ) : (
@@ -100,11 +100,11 @@ export default function DraftsPage() {
               <div className="mb-4 sm:mb-0">
                 <div className="flex items-center gap-3 mb-1">
                   <h3 className="font-heading text-lg">{draft.title || "Recette sans titre"}</h3>
-                  <span className="text-xs bg-stone/10 text-stone px-2 py-1 rounded-full uppercase tracking-wider">
+                  <span className="text-xs bg-stone/10 text-gray-500 px-2 py-1 rounded-full uppercase tracking-wider">
                     {draft.sourceType}
                   </span>
                 </div>
-                <p className="text-sm text-brown">
+                <p className="text-sm text-gray-500">
                   Créé le {(draft.createdAt as any)?.seconds ? new Date((draft.createdAt as any).seconds * 1000).toLocaleDateString() : 'Date inconnue'}
                 </p>
               </div>
@@ -126,7 +126,7 @@ export default function DraftsPage() {
         onClose={() => setDraftToDelete(null)}
         title="Supprimer le brouillon"
       >
-        <p className="mb-6 text-brown">Êtes-vous sûr de vouloir supprimer ce brouillon ? Cette action est irréversible.</p>
+        <p className="mb-6 text-gray-500">Êtes-vous sûr de vouloir supprimer ce brouillon ? Cette action est irréversible.</p>
         <div className="flex justify-end gap-3">
           <Button variant="ghost" onClick={() => setDraftToDelete(null)}>{t("common.cancel")}</Button>
           <Button variant="danger" onClick={handleDelete}>{t("common.delete")}</Button>

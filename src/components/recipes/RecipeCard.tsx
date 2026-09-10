@@ -17,7 +17,7 @@ export function RecipeCard({ recipe, showSaveButton, onSave }: RecipeCardProps) 
   const difficultyLevel = recipe.difficulty === 'hard' ? 3 : recipe.difficulty === 'medium' ? 2 : 1;
 
   const coverImage = (
-    <div className="relative w-full aspect-[4/3] overflow-hidden bg-cream-dark">
+    <div className="relative w-full aspect-[4/5] overflow-hidden bg-gray-100-dark">
       {recipe.coverImageURL ? (
         <img 
           src={recipe.coverImageURL} 
@@ -52,8 +52,8 @@ export function RecipeCard({ recipe, showSaveButton, onSave }: RecipeCardProps) 
   );
 
   return (
-    <Link href={`/recipes/${recipe.id}`} className="block h-full outline-none focus:ring-2 focus:ring-terracotta focus:ring-offset-2 rounded-[24px] group">
-      <Card variant="interactive" imageHeader={coverImage} className="h-full flex flex-col border border-stone-light/30 bg-white shadow-sm overflow-hidden rounded-[24px]">
+    <Link href={`/recipes/${recipe.id}`} className="block h-full outline-none focus:ring-2 focus:ring-terracotta focus:ring-offset-2 rounded-[32px] group">
+      <Card variant="interactive" imageHeader={coverImage} className="h-full flex flex-col bg-white shadow-xl shadow-black/5 overflow-hidden rounded-[32px] border-none">
         <h3 className="font-heading text-[1.5rem] font-black text-charcoal mb-4 line-clamp-2 leading-tight">
           {recipe.title}
         </h3>
@@ -67,7 +67,7 @@ export function RecipeCard({ recipe, showSaveButton, onSave }: RecipeCardProps) 
             {[1, 2, 3].map(level => (
               <Flame 
                 key={level} 
-                className={`w-[15px] h-[15px] ${level <= difficultyLevel ? 'text-terracotta fill-terracotta' : 'text-stone-light/30 fill-stone-light/10'}`} 
+                className={`w-[15px] h-[15px] ${level <= difficultyLevel ? 'text-black fill-black' : 'text-gray-300 fill-gray-300'}`} 
               />
             ))}
           </div>
@@ -80,12 +80,12 @@ export function RecipeCard({ recipe, showSaveButton, onSave }: RecipeCardProps) 
         <div className="mt-auto pt-1">
           <div className="flex flex-wrap gap-2">
             {recipe.tags?.slice(0, 3).map((tag, i) => (
-              <span key={i} className="text-[13px] font-medium px-3.5 py-1 bg-cream rounded-full text-charcoal/70">
+              <span key={i} className="text-[13px] font-medium px-3.5 py-1 bg-gray-100 rounded-full text-black">
                 {tag}
               </span>
             ))}
             {(recipe.tags?.length || 0) > 3 && (
-              <span className="text-[13px] font-medium px-3.5 py-1 bg-cream rounded-full text-charcoal/70">
+              <span className="text-[13px] font-medium px-3.5 py-1 bg-gray-100 rounded-full text-black">
                 +{(recipe.tags?.length || 0) - 3}
               </span>
             )}

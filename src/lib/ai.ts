@@ -21,14 +21,22 @@ Retourne un JSON avec cette structure exacte (sans aucun bloc markdown ni format
   "title": "string",
   "description": "string (courte description)",
   "ingredients": [{"name": "string", "quantity": number ou null, "unit": "string", "section": "string (optionnel, ex: 'Pour la pâte', 'Pour le glaçage')"}],
-  "instructions": [{"text": "étape 1", "section": "string (optionnel)"}, {"text": "étape 2", "section": "string (optionnel)"}],
-  "prepTime": number (en minutes),
-  "cookTime": number (en minutes),
-  "servings": number,
+  "instructions": [
+    {
+      "text": "étape 1", 
+      "section": "string (optionnel)",
+      "ingredients": [{"name": "string", "quantity": number, "unit": "string"}] // Uniquement les ingrédients ajoutés à CETTE étape précise, avec la quantité EXACTE utilisée à ce moment-là.
+    }
+  ],
+  "prepTime": number (en minutes, estimation si non trouvé),
+  "cookTime": number (en minutes, estimation si non trouvé),
+  "servings": number (estimation si non trouvée),
   "difficulty": "easy" | "medium" | "hard",
   "tags": ["tag1", "tag2"],
   "utensils": ["array of utensil ids (optionnel)"]
 }
+
+Règle CRUCIALE pour les instructions : Pour chaque étape, extrais dans le tableau \`ingredients\` uniquement les ingrédients physiquement incorporés ou manipulés lors de CETTE étape. Si une recette demande d'ajouter 120g de sucre en 3 fois, chaque étape d'incorporation devra lister "sucre" avec une quantité de 40g. Calcule les proportions nécessaires selon le texte. Si un ingrédient n'est pas utilisé dans une étape, son tableau \`ingredients\` sera vide.
 
 Si des ustensiles spécifiques sont nécessaires, renvoie un tableau contenant uniquement leurs identifiants parmi cette liste stricte:
 "food_container", "kitchen_scale", "measuring_jug", "mixing_bowl", "whisk", "blender", "oven", "microwave", "mold", "pan", "pastry_roll", "piping_bag".
@@ -68,7 +76,13 @@ Retourne un JSON avec cette structure exacte:
   "title": "string",
   "description": "string (courte description)",
   "ingredients": [{"name": "string", "quantity": number ou null, "unit": "string", "section": "string (optionnel, ex: 'Pour la pâte', 'Pour le glaçage')"}],
-  "instructions": [{"text": "étape 1", "section": "string (optionnel)"}, {"text": "étape 2", "section": "string (optionnel)"}],
+  "instructions": [
+    {
+      "text": "étape 1", 
+      "section": "string (optionnel)",
+      "ingredients": [{"name": "string", "quantity": number, "unit": "string"}] // Uniquement les ingrédients ajoutés à CETTE étape précise, avec la quantité EXACTE utilisée à ce moment-là.
+    }
+  ],
   "prepTime": number (en minutes, estimation si non visible),
   "cookTime": number (en minutes, estimation si non visible),
   "servings": number (estimation si non visible),
@@ -76,6 +90,8 @@ Retourne un JSON avec cette structure exacte:
   "tags": ["tag1", "tag2"],
   "utensils": ["array of utensil ids (optionnel)"]
 }
+
+Règle CRUCIALE pour les instructions : Pour chaque étape, extrais dans le tableau \`ingredients\` uniquement les ingrédients physiquement incorporés ou manipulés lors de CETTE étape. Si une recette demande d'ajouter 120g de sucre en 3 fois, chaque étape d'incorporation devra lister "sucre" avec une quantité de 40g. Calcule les proportions nécessaires selon le texte. Si un ingrédient n'est pas utilisé dans une étape, son tableau \`ingredients\` sera vide.
 
 Si des ustensiles spécifiques sont nécessaires, renvoie un tableau contenant uniquement leurs identifiants parmi cette liste stricte:
 "food_container", "kitchen_scale", "measuring_jug", "mixing_bowl", "whisk", "blender", "oven", "microwave", "mold", "pan", "pastry_roll", "piping_bag".
