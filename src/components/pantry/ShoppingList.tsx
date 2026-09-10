@@ -8,7 +8,7 @@ import type { ShoppingItem } from '@/types';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
-import { Plus, Trash2, CheckCircle2, Circle, Check } from 'lucide-react';
+import { Plus, Trash2, CheckCircle2, Circle, Check, Copy } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
 import { RecipeToShoppingModal } from './RecipeToShoppingModal';
 import { ChefHat } from 'lucide-react';
@@ -31,6 +31,20 @@ export function ShoppingList() {
   const [newItemQty, setNewItemQty] = useState('');
   const [newItemUnit, setNewItemUnit] = useState('pièce');
   const [isRecipeModalOpen, setIsRecipeModalOpen] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
+
+  const handleCopy = () => {
+    const textToCopy = items
+      .filter(item => !item.checked)
+      .map(item => `- ${item.quantity} ${item.unit === 'pièce' ? '' : item.unit} ${translateDynamic('items', item.name)}`.replace(/\s+/g, ' ').trim())
+      .join('\n');
+    
+    if (textToCopy) {
+      navigator.clipboard.writeText(`${t('pantry.shopping_list')}:\n${textToCopy}`);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000);
+    }
+  };
 
   useEffect(() => {
     if (!user) return;
@@ -159,6 +173,21 @@ export function ShoppingList() {
           </Button>
         </div>
       </form>
+
+      {!loading && uncheckedItems.length > 0 && (
+        <div className="flex justify-end mb-4">
+          <Button 
+            type="button" 
+            variant="ghost" 
+            size="sm" 
+            onClick={handleCopy} 
+            className={`flex items-center gap-2 text-xs font-medium rounded-xl px-3 py-1.5 transition-all ${isCopied ? 'bg-green-100 text-green-700' : 'bg-stone/5 text-stone-500 hover:text-charcoal hover:bg-stone/10'}`}
+          >
+            {isCopied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+            {isCopied ? t('common.copied') || 'Copié !' : t('pantry.copy_list') || 'Copier la liste'}
+          </Button>
+        </div>
+      )}
 
       <div className="flex-1 overflow-y-auto mb-4 pr-2">
         {loading ? (

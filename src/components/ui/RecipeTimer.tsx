@@ -14,17 +14,73 @@ export default function RecipeTimer({ durationMinutes, label }: RecipeTimerProps
   const [isRunning, setIsRunning] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   
-  const audioRef = useRef<HTMLAudioElement | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const [ringCount, setRingCount] = useState(0);
 
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const audioBufferRef = useRef<AudioBuffer | null>(null);
+  const currentSourceRef = useRef<AudioBufferSourceNode | null>(null);
+
   useEffect(() => {
-    // Create audio on mount
-    audioRef.current = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+    // Create AudioContext and load sound (Web Audio API won't stop background music)
+    const initAudio = async () => {
+      try {
+        const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+        if (!AudioContextClass) return;
+        
+        audioContextRef.current = new AudioContextClass();
+        
+        const response = await fetch('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+        const arrayBuffer = await response.arrayBuffer();
+        
+        audioContextRef.current.decodeAudioData(arrayBuffer, (buffer) => {
+          audioBufferRef.current = buffer;
+        }, (error) => {
+          console.error('Audio decode error', error);
+        });
+      } catch (err) {
+        console.error('Failed to init audio', err);
+      }
+    };
+    
+    initAudio();
+
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
+      if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
+        audioContextRef.current.close().catch(() => {});
+      }
     };
   }, []);
+
+  const playAudio = () => {
+    if (!audioContextRef.current || !audioBufferRef.current) return;
+    
+    if (audioContextRef.current.state === 'suspended') {
+      audioContextRef.current.resume().catch(() => {});
+    }
+    
+    const source = audioContextRef.current.createBufferSource();
+    source.buffer = audioBufferRef.current;
+    source.connect(audioContextRef.current.destination);
+    
+    source.onended = () => {
+      setRingCount(prev => prev + 1);
+    };
+    
+    source.start(0);
+    currentSourceRef.current = source;
+  };
+
+  const stopAudio = () => {
+    if (currentSourceRef.current) {
+      currentSourceRef.current.onended = null;
+      try {
+        currentSourceRef.current.stop();
+      } catch (e) {}
+      currentSourceRef.current = null;
+    }
+  };
 
   useEffect(() => {
     if (isRunning && timeLeft > 0) {
@@ -49,19 +105,11 @@ export default function RecipeTimer({ durationMinutes, label }: RecipeTimerProps
   useEffect(() => {
     let timeout: NodeJS.Timeout;
 
-    const ringAgain = () => {
-      setRingCount(prev => prev + 1);
-    };
-
-    if (isFinished && audioRef.current) {
+    if (isFinished) {
       if (ringCount < 6) { // Ring 6 times max (~30 seconds total)
         timeout = setTimeout(() => {
-          if (audioRef.current) {
-            audioRef.current.currentTime = 0;
-            audioRef.current.play().catch(e => console.log('Audio loop failed', e));
-          }
-        }, 5000); // 5 seconds cooldown between rings
-        audioRef.current.addEventListener('ended', ringAgain);
+          playAudio();
+        }, ringCount === 0 ? 0 : 5000); // 0 delay for the first ring, 5 seconds cooldown after
       } else {
         // Automatically stop after max rings
         setIsFinished(false);
@@ -73,9 +121,6 @@ export default function RecipeTimer({ durationMinutes, label }: RecipeTimerProps
 
     return () => {
       clearTimeout(timeout);
-      if (audioRef.current) {
-        audioRef.current.removeEventListener('ended', ringAgain);
-      }
     };
   }, [isFinished, ringCount, totalSeconds]);
 
@@ -83,12 +128,6 @@ export default function RecipeTimer({ durationMinutes, label }: RecipeTimerProps
     setIsRunning(false);
     setIsFinished(true);
     if (intervalRef.current) clearInterval(intervalRef.current);
-    
-    // Play sound immediately
-    if (audioRef.current) {
-      audioRef.current.currentTime = 0;
-      audioRef.current.play().catch(e => console.log('Audio play failed', e));
-    }
     
     // Show notification
     if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'granted') {
@@ -106,10 +145,7 @@ export default function RecipeTimer({ durationMinutes, label }: RecipeTimerProps
       setTimeLeft(totalSeconds);
       setIsRunning(false);
       setRingCount(0);
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-      }
+      stopAudio();
     } else {
       if (!isRunning) {
         // Request notification permission
@@ -117,12 +153,9 @@ export default function RecipeTimer({ durationMinutes, label }: RecipeTimerProps
           Notification.requestPermission();
         }
         
-        // iOS Audio Unlock: play and immediately pause to unlock the audio context
-        if (audioRef.current && timeLeft === totalSeconds) {
-          audioRef.current.play().then(() => {
-            audioRef.current?.pause();
-            if (audioRef.current) audioRef.current.currentTime = 0;
-          }).catch(e => console.log('Audio unlock failed', e));
+        // iOS Audio Unlock: resume the audio context on user interaction
+        if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
+          audioContextRef.current.resume().catch(() => {});
         }
       }
       setIsRunning(!isRunning);

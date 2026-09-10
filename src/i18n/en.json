@@ -123,7 +123,8 @@
     "ingredients_to_add": "Ingredients to add",
     "missing_ingredients": "Here are the ingredients you are missing for",
     "ignore": "Ignore",
-    "move_to_pantry": "Move to pantry"
+    "move_to_pantry": "Move to pantry",
+    "copy_list": "Copy list"
   },
   "categories": {
     "Fruits & Légumes": "Fruits & Vegetables",
