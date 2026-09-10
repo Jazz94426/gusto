@@ -188,7 +188,7 @@ export function PantryInventory() {
                   <ul className="space-y-2">
                     {catItems.map(item => (
                       <li key={item.id} className="flex justify-between items-center group py-3 px-4 bg-white border border-stone-light/30 hover:border-terracotta/30 rounded-[16px] shadow-sm hover:shadow transition-all">
-                        <div className="flex items-center flex-1 min-w-0 pr-4">
+                        <div className="flex items-center flex-1 min-w-0 pr-4 py-1">
                           {item.imageUrl ? (
                             <img src={item.imageUrl} alt={item.name} className="w-8 h-8 object-contain bg-white rounded-md mr-3 border border-stone-light/30 flex-shrink-0" />
                           ) : (
@@ -196,7 +196,7 @@ export function PantryInventory() {
                               <span className="text-xs text-stone-400 font-bold">{item.name.charAt(0).toUpperCase()}</span>
                             </div>
                           )}
-                          <span className="font-medium text-charcoal truncate flex-1">{translateDynamic('items', item.name)}</span>
+                          <span className="font-medium text-charcoal break-words flex-1">{translateDynamic('items', item.name)}</span>
                         </div>
                         <div className="flex items-center justify-end w-24 flex-shrink-0 mr-3">
                           <span className="text-sm font-medium text-stone-400 bg-stone/5 px-2 py-0.5 rounded-md whitespace-nowrap">

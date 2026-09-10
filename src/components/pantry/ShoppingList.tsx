@@ -201,8 +201,8 @@ export function ShoppingList() {
                         </div>
                       )}
 
-                      <div className="flex-1 min-w-0 pr-4 flex items-center">
-                        <span className={`font-medium truncate flex-1 ${item.checked ? 'text-stone-400 line-through' : 'text-charcoal'}`}>
+                      <div className="flex-1 min-w-0 pr-4 flex items-center py-1">
+                        <span className={`font-medium break-words flex-1 ${item.checked ? 'text-stone-400 line-through' : 'text-charcoal'}`}>
                           {translateDynamic('items', item.name)}
                         </span>
                       </div>
@@ -241,8 +241,8 @@ export function ShoppingList() {
                         </div>
                       )}
 
-                      <div className="flex-1 min-w-0 pr-4 flex items-center line-through text-stone-400">
-                        <span className="font-medium truncate flex-1">
+                      <div className="flex-1 min-w-0 pr-4 flex items-center line-through text-stone-400 py-1">
+                        <span className="font-medium break-words flex-1">
                           {translateDynamic('items', item.name)}
                         </span>
                       </div>
