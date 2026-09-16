@@ -159,7 +159,7 @@ export function WeekView({ currentDate, onNavigateToDate }: { currentDate: Date;
               onDragLeave={handleDragLeave}
               onDrop={(e) => handleDrop(e, mealId)}
               className={`rounded-[24px] p-5 shadow-sm border transition-all ${
-                isDragOver ? 'bg-terracotta/5 border-terracotta border-dashed' : 'bg-white border-stone/10'
+                isDragOver ? 'bg-terracotta/5 border-terracotta border-dashed' : 'bg-cream border-stone/10'
               }`}
             >
               <div className="flex justify-between items-center mb-4">

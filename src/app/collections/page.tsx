@@ -173,7 +173,7 @@ export default function CollectionsPage() {
             >
               <div className="flex justify-between items-start mb-3 mt-4">
                 <h3 className="text-xl font-heading font-black text-black line-clamp-1">{coll.name}</h3>
-                <Badge variant="primary" size="sm" className="bg-gray-100 text-gray-500-600 border-none">
+                <Badge variant="primary" size="sm" className="bg-cream-dark text-gray-500-600 border-none">
                   {coll.recipeIds?.length || 0} recettes
                 </Badge>
               </div>

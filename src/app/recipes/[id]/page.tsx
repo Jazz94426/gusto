@@ -57,9 +57,15 @@ export default function RecipeDetailPage({ params }: { params: Promise<{ id: str
       try {
         const translate = async (text: string) => {
           if (!text) return text;
-          const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${language}&dt=t&q=${encodeURIComponent(text)}`);
-          const data = await res.json();
-          return data[0].map((x: any) => x[0]).join('');
+          try {
+            const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${language}&dt=t&q=${encodeURIComponent(text)}`);
+            if (!res.ok) return text;
+            const data = await res.json();
+            return data[0].map((x: any) => x[0]).join('');
+          } catch (err) {
+            console.warn("Translation failed, falling back to original text", err);
+            return text;
+          }
         };
 
         const translatedTitle = await translate(recipe.title);

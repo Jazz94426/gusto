@@ -123,7 +123,7 @@ export function RecipeAssigner({
                   <button
                     key={recipe.id}
                     onClick={() => handleSelectRecipe(recipe)}
-                    className="flex flex-col bg-white rounded-xl overflow-hidden border border-stone/20 hover:border-terracotta hover:shadow-md transition-all text-left"
+                    className="flex flex-col bg-cream rounded-xl overflow-hidden border border-stone/20 hover:border-terracotta hover:shadow-md transition-all text-left"
                   >
                     {recipe.coverImageURL ? (
                       <img src={recipe.coverImageURL} alt={recipe.title} className="w-full h-24 object-cover" />

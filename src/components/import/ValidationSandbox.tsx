@@ -68,7 +68,7 @@ export function ValidationSandbox({ recipeId }: ValidationSandboxProps) {
         status: "validated",
         updatedAt: new Date(),
       });
-      router.push("/recipes"); // Go to recipe list or detail page
+      router.push(`/recipes/${recipeId}`); // Go to detail page
     } catch (err) {
       console.error("Error validating:", err);
       alert(t('common.error'));

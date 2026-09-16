@@ -324,7 +324,7 @@ export default function CollectionDetailPage() {
               )}
             </div>
           </div>
-          <div className="flex items-center space-x-3 text-sm text-gray-500-500 font-semibold bg-gray-100 px-4 py-2 rounded-full w-fit">
+          <div className="flex items-center space-x-3 text-sm text-gray-500-500 font-semibold bg-cream-dark px-4 py-2 rounded-full w-fit">
             <span>{recipes.length} recettes</span>
             <span>•</span>
             <span>Créée le {(collectionData.createdAt as any)?.toDate ? (collectionData.createdAt as any).toDate().toLocaleDateString() : (collectionData.createdAt as any)?.toLocaleDateString ? (collectionData.createdAt as any).toLocaleDateString() : 'Récemment'}</span>
@@ -422,8 +422,8 @@ export default function CollectionDetailPage() {
                     <h3 className="font-heading font-black text-xl mb-2 text-black line-clamp-1">{recipe.title}</h3>
                     <p className="text-sm text-gray-500-500 mb-4 line-clamp-2 flex-grow">{recipe.description}</p>
                     <div className="mt-auto flex items-center space-x-2">
-                      <Badge variant="outline" size="sm" className="bg-gray-100 border-none text-gray-500-600">{recipe.prepTime + recipe.cookTime} min</Badge>
-                      <Badge variant="outline" size="sm" className="bg-gray-100 border-none text-gray-500-600">{t(`recipe.difficulty_${recipe.difficulty}`)}</Badge>
+                      <Badge variant="outline" size="sm" className="bg-cream-dark border-none text-gray-500-600">{recipe.prepTime + recipe.cookTime} min</Badge>
+                      <Badge variant="outline" size="sm" className="bg-cream-dark border-none text-gray-500-600">{t(`recipe.difficulty_${recipe.difficulty}`)}</Badge>
                     </div>
                   </div>
                 </div>

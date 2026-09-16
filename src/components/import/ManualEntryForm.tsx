@@ -19,13 +19,19 @@ import { Select } from "@/components/ui/Select";
 import { PREDEFINED_UTENSILS } from "@/constants/utensils";
 import { Check, X as XIcon } from "lucide-react";
 import { ImageCropperModal } from "@/components/ui/ImageCropperModal";
-import { Recipe, Ingredient, Instruction } from "@/types";
+import { Recipe, Ingredient, Instruction, StepIngredient } from "@/types";
 
 const PREDEFINED_TAGS = [
   "Petit-déjeuner", "Déjeuner", "Dîner", "Goûter", "Dessert", 
   "Asiatique", "Européen", "Végétarien", "Vegan", "Rapide", "Healthy",
   "Sans gluten", "Épicé", "Salade", "Boisson"
 ];
+
+const handleTextareaResize = (element: HTMLTextAreaElement | null) => {
+  if (!element) return;
+  element.style.height = "auto";
+  element.style.height = `${element.scrollHeight}px`;
+};
 
 export interface ManualEntryFormProps {
   initialData?: Partial<Recipe>;
@@ -67,6 +73,10 @@ export function ManualEntryForm({
   const [tags, setTags] = useState<string[]>(initialData?.tags || []);
   const [tagInput, setTagInput] = useState("");
   const [notes, setNotes] = useState(initialData?.notes || "");
+  const [typingIngredientForStep, setTypingIngredientForStep] = useState<number | null>(null);
+  const [newIngredientName, setNewIngredientName] = useState("");
+  const [editingStepIngredientKey, setEditingStepIngredientKey] = useState<string | null>(null);
+  const [editingStepIngredientValue, setEditingStepIngredientValue] = useState("");
   const [utensils, setUtensils] = useState<string[]>(
     initialData?.utensils || [],
   );
@@ -138,7 +148,7 @@ export function ManualEntryForm({
         title,
         description,
         ingredients: ingredients.filter((i) => i.name.trim() !== ""),
-        instructions: instructions.filter((i) => i?.text?.trim() !== ""),
+        instructions: instructions.filter((i) => i?.text?.trim() !== "").map(i => ({ ...i, ingredients: i.ingredients ? i.ingredients.filter(ing => ing.name.trim() !== "") : [] })),
         prepTime,
         cookTime,
         servings,
@@ -243,6 +253,61 @@ export function ManualEntryForm({
     setInstructions(instructions.filter((_, i) => i !== index));
   };
 
+  const handleAddStepIngredient = (instructionIndex: number, name: string) => {
+    if (!name) return;
+    const newInstructions = [...instructions];
+    const inst = newInstructions[instructionIndex];
+    if (!inst.ingredients) inst.ingredients = [];
+    
+    // 1. Try to find if this ingredient was already used in a previous (or any) step to inherit its quantity/unit
+    const allStepIngs = instructions.flatMap(i => i.ingredients || []);
+    const prevStepIng = allStepIngs.find(i => i.name === name);
+    
+    // 2. Fallback to global ingredients list
+    const globalIng = ingredients.find(i => i.name === name);
+    
+    inst.ingredients.push({ 
+      name, 
+      quantity: prevStepIng?.quantity ?? globalIng?.quantity ?? null, 
+      unit: prevStepIng?.unit ?? globalIng?.unit ?? "g" 
+    });
+    
+    setInstructions(newInstructions);
+  };
+
+  const handleUpdateStepIngredient = (instructionIndex: number, ingredientIndex: number, field: keyof StepIngredient, value: string | number | null) => {
+    const newInstructions = [...instructions];
+    const inst = newInstructions[instructionIndex];
+    if (inst.ingredients) {
+      inst.ingredients[ingredientIndex] = { ...inst.ingredients[ingredientIndex], [field]: value } as StepIngredient;
+    }
+    setInstructions(newInstructions);
+  };
+
+  const handleRemoveStepIngredient = (instructionIndex: number, ingredientIndex: number) => {
+    const newInstructions = [...instructions];
+    const inst = newInstructions[instructionIndex];
+    if (inst.ingredients) {
+      inst.ingredients = inst.ingredients.filter((_, i) => i !== ingredientIndex);
+    }
+    setInstructions(newInstructions);
+  };
+
+  const handleRenameIngredientName = (oldName: string, newName: string) => {
+    if (!oldName || !newName || oldName === newName) return;
+    const matchesGlobal = ingredients.some(i => i.name === oldName);
+    if (matchesGlobal) {
+      setIngredients(prev => prev.map(i => i.name === oldName ? { ...i, name: newName } : i));
+    }
+    setInstructions(prev => prev.map(step => {
+      if (!step.ingredients) return step;
+      return {
+        ...step,
+        ingredients: step.ingredients.map(ing => ing.name === oldName ? { ...ing, name: newName } : ing)
+      };
+    }));
+  };
+
   const handleMoveInstruction = (index: number, direction: "up" | "down") => {
     if (direction === "up" && index > 0) {
       const newInstructions = [...instructions];
@@ -324,7 +389,7 @@ export function ManualEntryForm({
         description,
         coverImageURL,
         ingredients: ingredients.filter((i) => i.name.trim() !== ""),
-        instructions: instructions.filter((i) => i?.text?.trim() !== ""),
+        instructions: instructions.filter((i) => i?.text?.trim() !== "").map(i => ({ ...i, ingredients: i.ingredients ? i.ingredients.filter(ing => ing.name.trim() !== "") : [] })),
         prepTime,
         cookTime,
         servings,
@@ -518,14 +583,137 @@ export function ManualEntryForm({
                         placeholder="Sous-partie (ex: Pour le glaçage) - Optionnel"
                       />
                       <textarea
-                        className="w-full rounded-xl border border-stone p-3 focus:outline-none focus:ring-2 focus:ring-terracotta text-charcoal"
+                        ref={handleTextareaResize}
+                        className="w-full rounded-xl border border-stone p-3 focus:outline-none focus:ring-2 focus:ring-terracotta text-charcoal overflow-hidden resize-none"
                         rows={2}
                         value={inst.text || ""}
-                        onChange={(e) =>
-                          handleUpdateInstruction(idx, "text", e.target.value)
-                        }
+                        onChange={(e) => {
+                          handleUpdateInstruction(idx, "text", e.target.value);
+                          handleTextareaResize(e.target);
+                        }}
                         placeholder="Étape de préparation..."
                       />
+                      <div className="mt-2 space-y-2">
+                        <div className="flex flex-wrap gap-2">
+                          {inst.ingredients && inst.ingredients.map((ing, ingIdx) => (
+                            <div key={ingIdx} className="flex items-center bg-white border border-stone-light/50 shadow-sm rounded-full pl-3 pr-1 py-1 h-9">
+                              {editingStepIngredientKey === `${idx}-${ingIdx}` ? (
+                                <input
+                                  autoFocus
+                                  className="text-sm font-medium text-charcoal bg-transparent outline-none w-24 mr-2 border-b border-terracotta"
+                                  value={editingStepIngredientValue}
+                                  onChange={e => setEditingStepIngredientValue(e.target.value)}
+                                  onKeyDown={e => {
+                                    if (e.key === 'Enter') {
+                                      e.preventDefault();
+                                      handleRenameIngredientName(ing.name, editingStepIngredientValue.trim());
+                                      setEditingStepIngredientKey(null);
+                                    }
+                                    if (e.key === 'Escape') {
+                                      setEditingStepIngredientKey(null);
+                                    }
+                                  }}
+                                  onBlur={() => {
+                                    handleRenameIngredientName(ing.name, editingStepIngredientValue.trim());
+                                    setEditingStepIngredientKey(null);
+                                  }}
+                                />
+                              ) : (
+                                <span 
+                                  className="text-sm font-medium text-charcoal mr-2 cursor-pointer hover:text-terracotta" 
+                                  onClick={() => {
+                                    setEditingStepIngredientKey(`${idx}-${ingIdx}`);
+                                    setEditingStepIngredientValue(ing.name);
+                                  }}
+                                  title="Cliquez pour renommer"
+                                >
+                                  {ing.name}
+                                </span>
+                              )}
+                              <input
+                                type="number"
+                                className="w-14 text-sm text-center bg-stone/5 border border-stone/20 rounded-md px-1 outline-none h-6 focus:border-terracotta focus:ring-1 focus:ring-terracotta"
+                                value={ing.quantity || ""}
+                                onChange={(e) => handleUpdateStepIngredient(idx, ingIdx, "quantity", e.target.value ? parseFloat(e.target.value) : null)}
+                                placeholder="Qté"
+                              />
+                              <select
+                                className="text-sm bg-transparent outline-none text-stone-500 ml-1 h-6 cursor-pointer hover:text-charcoal"
+                                value={ing.unit || "g"}
+                                onChange={(e) => handleUpdateStepIngredient(idx, ingIdx, "unit", e.target.value)}
+                              >
+                                <option value="g">g</option>
+                                <option value="kg">kg</option>
+                                <option value="ml">ml</option>
+                                <option value="L">L</option>
+                                <option value="pièce">p.</option>
+                                <option value="càs">càs</option>
+                                <option value="càc">càc</option>
+                              </select>
+                              <button
+                                onClick={() => handleRemoveStepIngredient(idx, ingIdx)}
+                                className="ml-2 text-stone-400 hover:text-red-500 hover:bg-red-50 rounded-full p-1 transition-colors"
+                              >
+                                <XIcon className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          ))}
+                          
+                          {typingIngredientForStep === idx ? (
+                            <div className="flex items-center bg-white border border-terracotta/50 shadow-sm rounded-full pl-3 pr-1 py-1 h-9 ring-1 ring-terracotta">
+                              <input
+                                autoFocus
+                                className="text-sm font-medium text-charcoal bg-transparent outline-none w-32 mr-2 placeholder:text-stone-400"
+                                placeholder="Nom..."
+                                value={newIngredientName}
+                                onChange={e => setNewIngredientName(e.target.value)}
+                                onKeyDown={e => {
+                                  if (e.key === 'Enter') {
+                                    e.preventDefault();
+                                    if (newIngredientName.trim()) {
+                                      handleAddStepIngredient(idx, newIngredientName.trim());
+                                    }
+                                    setTypingIngredientForStep(null);
+                                    setNewIngredientName("");
+                                  }
+                                  if (e.key === 'Escape') {
+                                    setTypingIngredientForStep(null);
+                                    setNewIngredientName("");
+                                  }
+                                }}
+                                onBlur={() => {
+                                  if (newIngredientName.trim()) {
+                                    handleAddStepIngredient(idx, newIngredientName.trim());
+                                  }
+                                  setTypingIngredientForStep(null);
+                                  setNewIngredientName("");
+                                }}
+                              />
+                            </div>
+                          ) : (
+                            <select
+                              className="h-9 text-sm bg-stone/5 border border-dashed border-stone-light/80 rounded-full px-3 text-stone-500 font-medium outline-none cursor-pointer hover:border-terracotta hover:text-terracotta hover:bg-terracotta/5 transition-all appearance-none text-center"
+                              value=""
+                              onChange={(e) => {
+                                if (e.target.value === "__NEW__") {
+                                  setTypingIngredientForStep(idx);
+                                } else {
+                                  handleAddStepIngredient(idx, e.target.value);
+                                }
+                              }}
+                            >
+                              <option value="" disabled>+ Ajouter un ingrédient</option>
+                              <option value="__NEW__">✏️ Écrire un autre nom...</option>
+                            {Array.from(new Set([
+                              ...ingredients.map(i => i.name.trim()),
+                              ...instructions.flatMap(inst => inst.ingredients?.map(i => i.name.trim()) || [])
+                            ])).filter(n => n !== "").map(name => (
+                              <option key={name} value={name}>{name}</option>
+                            ))}
+                          </select>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   <div className="flex flex-col space-y-1">
                     <Button

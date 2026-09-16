@@ -65,7 +65,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
-      <Card className="w-full max-w-md p-6 sm:p-8 bg-gray-100">
+      <Card className="w-full max-w-md p-6 sm:p-8 bg-cream-dark">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-heading text-terracotta mb-2">Gusto</h1>
           <p className="text-gray-500">Votre assistant culinaire personnel</p>

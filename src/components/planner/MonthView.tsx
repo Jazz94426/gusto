@@ -114,7 +114,7 @@ export function MonthView({ currentDate, onNavigateToWeek }: { currentDate: Date
               onClick={() => onNavigateToWeek(day)}
               className={`
                 relative p-2 border border-stone/20 rounded-xl flex flex-col items-center justify-start hover:border-terracotta transition-colors
-                ${!isCurrentMonth ? 'opacity-40 bg-stone/5' : 'bg-white'}
+                ${!isCurrentMonth ? 'opacity-40 bg-stone/5' : 'bg-cream'}
                 ${isToday ? 'ring-2 ring-terracotta ring-inset' : ''}
                 ${dayEntries.length > 0 ? 'bg-cream/30' : ''}
               `}

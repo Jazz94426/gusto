@@ -62,11 +62,11 @@ export default function PlannerPage() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <h1 className="text-3xl font-heading text-black">{t("nav.planner")}</h1>
         
-        <div className="flex items-center bg-gray-100 p-1 rounded-xl">
+        <div className="flex items-center bg-cream-dark p-1 rounded-xl">
           <button
             onClick={() => setView('week')}
             className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-              view === 'week' ? 'bg-white shadow-sm text-black' : 'text-gray-500'
+              view === 'week' ? 'bg-cream shadow-sm text-black' : 'text-gray-500'
             }`}
           >
             {t("planner.week")}
@@ -74,7 +74,7 @@ export default function PlannerPage() {
           <button
             onClick={() => setView('month')}
             className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-              view === 'month' ? 'bg-white shadow-sm text-black' : 'text-gray-500'
+              view === 'month' ? 'bg-cream shadow-sm text-black' : 'text-gray-500'
             }`}
           >
             {t("planner.month")}
@@ -82,16 +82,16 @@ export default function PlannerPage() {
         </div>
       </div>
 
-      <div className="bg-gray-100 rounded-2xl p-4 sm:p-6 shadow-sm flex flex-col flex-1 overflow-hidden">
+      <div className="bg-cream-dark rounded-2xl p-4 sm:p-6 shadow-sm flex flex-col flex-1 overflow-hidden">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-medium text-black">{formatHeader()}</h2>
           <div className="flex items-center gap-2">
             <Button variant="ghost" onClick={navigateToday} size="sm" className="hidden sm:inline-flex">{t("planner.today")}</Button>
             <div className="flex bg-gray-50 rounded-xl p-1">
-              <button onClick={navigatePrev} className="p-2 hover:bg-gray-100 rounded-lg text-gray-500 hover:text-black transition-colors">
+              <button onClick={navigatePrev} className="p-2 hover:bg-cream-dark rounded-lg text-gray-500 hover:text-black transition-colors">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg>
               </button>
-              <button onClick={navigateNext} className="p-2 hover:bg-gray-100 rounded-lg text-gray-500 hover:text-black transition-colors">
+              <button onClick={navigateNext} className="p-2 hover:bg-cream-dark rounded-lg text-gray-500 hover:text-black transition-colors">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
               </button>
             </div>

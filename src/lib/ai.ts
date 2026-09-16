@@ -37,6 +37,7 @@ Retourne un JSON avec cette structure exacte (sans aucun bloc markdown ni format
 }
 
 Règle CRUCIALE pour les instructions : Pour chaque étape, extrais dans le tableau \`ingredients\` uniquement les ingrédients physiquement incorporés ou manipulés lors de CETTE étape. Si une recette demande d'ajouter 120g de sucre en 3 fois, chaque étape d'incorporation devra lister "sucre" avec une quantité de 40g. Calcule les proportions nécessaires selon le texte. Si un ingrédient n'est pas utilisé dans une étape, son tableau \`ingredients\` sera vide.
+SUIVI DES INGRÉDIENTS : Si un ingrédient est préparé/transformé dans une étape (ex: le poulet est découpé en dés à l'étape 1), et qu'il est ensuite manipulé dans une étape suivante (ex: "mélanger les dés de poulet" à l'étape 2), tu DOIS ajouter un tag d'ingrédient pour ce produit transformé à cette étape suivante (ex: nom: "dés de poulet", en reprenant la quantité totale correspondante).
 
 Si des ustensiles spécifiques sont nécessaires, renvoie un tableau contenant uniquement leurs identifiants parmi cette liste stricte:
 "food_container", "kitchen_scale", "measuring_jug", "mixing_bowl", "whisk", "blender", "oven", "microwave", "mold", "pan", "pastry_roll", "piping_bag".
@@ -92,6 +93,7 @@ Retourne un JSON avec cette structure exacte:
 }
 
 Règle CRUCIALE pour les instructions : Pour chaque étape, extrais dans le tableau \`ingredients\` uniquement les ingrédients physiquement incorporés ou manipulés lors de CETTE étape. Si une recette demande d'ajouter 120g de sucre en 3 fois, chaque étape d'incorporation devra lister "sucre" avec une quantité de 40g. Calcule les proportions nécessaires selon le texte. Si un ingrédient n'est pas utilisé dans une étape, son tableau \`ingredients\` sera vide.
+SUIVI DES INGRÉDIENTS : Si un ingrédient est préparé/transformé dans une étape (ex: le poulet est découpé en dés à l'étape 1), et qu'il est ensuite manipulé dans une étape suivante (ex: "mélanger les dés de poulet" à l'étape 2), tu DOIS ajouter un tag d'ingrédient pour ce produit transformé à cette étape suivante (ex: nom: "dés de poulet", en reprenant la quantité totale correspondante).
 
 Si des ustensiles spécifiques sont nécessaires, renvoie un tableau contenant uniquement leurs identifiants parmi cette liste stricte:
 "food_container", "kitchen_scale", "measuring_jug", "mixing_bowl", "whisk", "blender", "oven", "microwave", "mold", "pan", "pastry_roll", "piping_bag".

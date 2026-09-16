@@ -30,13 +30,13 @@ export default function Home() {
 
         {/* Decorative Ingredients */}
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="absolute bottom-12 left-8 lg:left-[15%] animate-float-delayed pointer-events-none z-0">
-          <div className="w-24 h-24 bg-white rounded-full shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] flex items-center justify-center relative">
+          <div className="w-24 h-24 bg-cream rounded-full shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] flex items-center justify-center relative">
             <div className="w-20 h-20 bg-[#E8DCC4] rounded-full shadow-inner opacity-90"></div>
           </div>
         </motion.div>
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }} className="absolute bottom-32 left-4 lg:left-[8%] animate-float pointer-events-none z-0">
-          <div className="w-16 h-16 bg-white rounded-full shadow-[0_15px_30px_-10px_rgba(0,0,0,0.15)] flex items-center justify-center relative">
-            <div className="w-12 h-12 bg-gray-100 rounded-full shadow-inner opacity-90"></div>
+          <div className="w-16 h-16 bg-cream rounded-full shadow-[0_15px_30px_-10px_rgba(0,0,0,0.15)] flex items-center justify-center relative">
+            <div className="w-12 h-12 bg-cream-dark rounded-full shadow-inner opacity-90"></div>
           </div>
         </motion.div>
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }} className="absolute bottom-40 left-[25%] lg:left-[22%] animate-float pointer-events-none z-0 transform rotate-12">
@@ -48,7 +48,7 @@ export default function Home() {
           {/* Left Column: Typography & CTAs */}
           <motion.div variants={stagger} initial="hidden" animate="visible" className="max-w-2xl">
             {/* Top Badge */}
-            <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-sm mb-8 border border-stone-light/30">
+            <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 px-4 py-2 bg-cream rounded-full shadow-sm mb-8 border border-stone-light/30">
               <span className="text-terracotta">
                 <ChefHat className="w-4 h-4" />
               </span>
@@ -74,7 +74,7 @@ export default function Home() {
               </Link>
               <Link 
                 href="/login"
-                className="px-8 py-3.5 bg-white text-neutral-800 rounded-full font-semibold hover:bg-gray-50-dark transition-colors shadow-sm border border-stone-light/40"
+                className="px-8 py-3.5 bg-cream text-neutral-800 rounded-full font-semibold hover:bg-gray-50-dark transition-colors shadow-sm border border-stone-light/40"
               >
                 Créer un compte
               </Link>
@@ -88,7 +88,7 @@ export default function Home() {
             <div className="relative w-[300px] lg:w-[340px] h-[600px] lg:h-[680px] bg-[#F7F7F7] rounded-[48px] shadow-2xl border-[8px] border-white overflow-hidden z-10 lg:rotate-y-[-10deg] lg:rotate-x-[5deg] animate-float transform-gpu">
               
               {/* Phone Notch */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-white rounded-b-3xl z-20"></div>
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-cream rounded-b-3xl z-20"></div>
 
               {/* App UI Inside Phone */}
               <div className="p-6 pt-12 h-full flex flex-col pointer-events-none select-none">
@@ -99,14 +99,14 @@ export default function Home() {
                     </div>
                     <span className="font-medium text-sm text-neutral-800">{t('home.phone_user')}</span>
                   </div>
-                  <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm">
+                  <div className="w-8 h-8 bg-cream rounded-full flex items-center justify-center shadow-sm">
                     <Bell className="w-4 h-4 text-gray-500" />
                   </div>
                 </div>
 
                 <h2 className="text-2xl font-heading text-neutral-800 mb-4">{t('home.phone_title')}</h2>
                 
-                <div className="bg-white px-4 py-3 rounded-xl flex items-center gap-2 mb-6 shadow-sm">
+                <div className="bg-cream px-4 py-3 rounded-xl flex items-center gap-2 mb-6 shadow-sm">
                   <Search className="w-4 h-4 text-gray-500-light" />
                   <span className="text-gray-500-light text-sm">{t('home.phone_search')}</span>
                 </div>
@@ -126,7 +126,7 @@ export default function Home() {
                     const Icon = cat.icon;
                     return (
                       <div key={i} className="flex flex-col items-center gap-1">
-                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-sm ${i === 7 ? 'bg-[#98D8D0]' : 'bg-white'}`}>
+                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-sm ${i === 7 ? 'bg-[#98D8D0]' : 'bg-cream'}`}>
                           <Icon className={`w-5 h-5 ${cat.color}`} />
                         </div>
                         <span className="text-[10px] text-gray-500 font-medium">{cat.name}</span>
@@ -139,11 +139,11 @@ export default function Home() {
                 <div className="flex gap-4">
                   <div className="w-40 h-48 bg-stone-light/20 rounded-2xl relative overflow-hidden flex-shrink-0">
                     <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&q=80" alt="Food" className="w-full h-full object-cover" />
-                    <div className="absolute top-2 right-2 w-6 h-6 bg-white rounded-full flex items-center justify-center text-xs text-terracotta shadow-sm">♥</div>
+                    <div className="absolute top-2 right-2 w-6 h-6 bg-cream rounded-full flex items-center justify-center text-xs text-terracotta shadow-sm">♥</div>
                   </div>
                   <div className="w-40 h-48 bg-stone-light/20 rounded-2xl relative overflow-hidden flex-shrink-0">
                     <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&q=80" alt="Food" className="w-full h-full object-cover" />
-                    <div className="absolute top-2 right-2 w-6 h-6 bg-white rounded-full flex items-center justify-center text-xs text-terracotta shadow-sm">♥</div>
+                    <div className="absolute top-2 right-2 w-6 h-6 bg-cream rounded-full flex items-center justify-center text-xs text-terracotta shadow-sm">♥</div>
                   </div>
                 </div>
 
@@ -162,7 +162,7 @@ export default function Home() {
 
             {/* Floating Badges */}
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 1 }} className="absolute top-10 left-0 lg:-left-20 z-20 animate-float-delayed">
-              <div className="bg-white p-3 rounded-2xl shadow-xl flex items-center gap-3 border border-stone-light/10">
+              <div className="bg-cream p-3 rounded-2xl shadow-xl flex items-center gap-3 border border-stone-light/10">
                 <img src="https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=100&q=80" alt="Recipe" className="w-12 h-12 rounded-xl object-cover" />
                 <div>
                   <p className="font-medium text-sm text-neutral-800">Sausage egg</p>
@@ -177,7 +177,7 @@ export default function Home() {
             </motion.div>
 
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 1.2 }} className="absolute top-40 left-4 lg:-left-16 z-20 animate-float">
-              <div className="bg-white p-3 rounded-2xl shadow-xl flex items-center gap-3 border border-stone-light/10">
+              <div className="bg-cream p-3 rounded-2xl shadow-xl flex items-center gap-3 border border-stone-light/10">
                 <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=100&q=80" alt="Recipe" className="w-12 h-12 rounded-xl object-cover" />
                 <div>
                   <p className="font-medium text-sm text-neutral-800">Mix vegetables</p>
@@ -231,7 +231,7 @@ export default function Home() {
             <img src="/images/import-recipe.jpg" alt="Scanning a recipe" className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
             <div className="absolute bottom-8 left-8 right-8">
-              <div className="bg-white/90 backdrop-blur-md p-4 rounded-2xl flex items-center gap-4">
+              <div className="bg-cream/90 backdrop-blur-md p-4 rounded-2xl flex items-center gap-4">
                 <div className="w-12 h-12 bg-terracotta rounded-xl flex items-center justify-center text-white">
                   <ScanLine className="w-6 h-6" />
                 </div>
@@ -248,7 +248,7 @@ export default function Home() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6 }}
-            className="order-1 lg:order-2 bg-white p-10 lg:p-12 rounded-[40px] shadow-xl border border-stone-light/20"
+            className="order-1 lg:order-2 bg-cream p-10 lg:p-12 rounded-[40px] shadow-xl border border-stone-light/20"
           >
             <div className="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center mb-6">
               <ScanLine className="w-8 h-8 text-terracotta" />
@@ -281,7 +281,7 @@ export default function Home() {
             transition={{ duration: 0.6 }}
             className="order-1"
           >
-            <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-sm">
+            <div className="w-16 h-16 bg-cream rounded-2xl flex items-center justify-center mb-6 shadow-sm">
               <CalendarDays className="w-8 h-8 text-terracotta" />
             </div>
             <h2 className="text-4xl lg:text-5xl font-heading text-neutral-800 leading-[1.1] mb-6">{t('home.feature2_title')}</h2>
@@ -302,7 +302,7 @@ export default function Home() {
           >
             <img src="https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=800&q=80" alt="Meal planning" className="w-full h-full object-cover" />
             <div className="absolute top-8 right-8">
-              <div className="bg-white/95 backdrop-blur-sm p-4 rounded-2xl shadow-xl w-48 rotate-3">
+              <div className="bg-cream/95 backdrop-blur-sm p-4 rounded-2xl shadow-xl w-48 rotate-3">
                 <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{t('home.feature2_img_badge1')}</p>
                 <div className="bg-gray-50 p-2 rounded-lg flex items-center gap-2">
                   <Utensils className="w-4 h-4 text-terracotta" />
@@ -315,7 +315,7 @@ export default function Home() {
       </section>
 
       {/* Feature Section 3 */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-cream">
         <div className="page-container grid lg:grid-cols-2 gap-16 items-center">
           <motion.div 
             initial={{ opacity: 0, x: -50 }}
@@ -327,7 +327,7 @@ export default function Home() {
             <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&q=80" alt="Grocery shopping" className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
             <div className="absolute bottom-8 left-8 right-8">
-              <div className="bg-white/90 backdrop-blur-md p-5 rounded-2xl shadow-xl">
+              <div className="bg-cream/90 backdrop-blur-md p-5 rounded-2xl shadow-xl">
                 <div className="flex items-center gap-3 mb-3 border-b border-stone-light/50 pb-3">
                   <div className="w-6 h-6 rounded-md bg-terracotta/20 flex items-center justify-center">
                     <div className="w-3 h-3 rounded-sm bg-terracotta"></div>
@@ -347,7 +347,7 @@ export default function Home() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6 }}
-            className="order-1 lg:order-2 bg-white p-10 lg:p-12 rounded-[40px] shadow-xl border border-stone-light/20"
+            className="order-1 lg:order-2 bg-cream p-10 lg:p-12 rounded-[40px] shadow-xl border border-stone-light/20"
           >
             <div className="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center mb-6">
               <ShoppingBag className="w-8 h-8 text-terracotta" />
